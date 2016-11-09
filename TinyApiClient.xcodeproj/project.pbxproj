@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		063DFD0B1DD3DDCC00D6564E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063DFD0A1DD3DDCC00D6564E /* User.swift */; };
 		06A1C80B1DD3D171005B9D34 /* TinyApiClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A1C8011DD3D171005B9D34 /* TinyApiClient.framework */; };
 		06A1C8101DD3D171005B9D34 /* TinyApiClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A1C80F1DD3D171005B9D34 /* TinyApiClientTests.swift */; };
 		06A1C8121DD3D171005B9D34 /* TinyApiClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 06A1C8041DD3D171005B9D34 /* TinyApiClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -24,6 +25,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		063DFD0A1DD3DDCC00D6564E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		06A1C8011DD3D171005B9D34 /* TinyApiClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TinyApiClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		06A1C8041DD3D171005B9D34 /* TinyApiClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TinyApiClient.h; sourceTree = "<group>"; };
 		06A1C8051DD3D171005B9D34 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				06A1C81B1DD3D18C005B9D34 /* JSON.swift */,
+				063DFD0A1DD3DDCC00D6564E /* User.swift */,
 				06A1C8041DD3D171005B9D34 /* TinyApiClient.h */,
 				06A1C8051DD3D171005B9D34 /* Info.plist */,
 			);
@@ -203,6 +206,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				06A1C81C1DD3D18C005B9D34 /* JSON.swift in Sources */,
+				063DFD0B1DD3DDCC00D6564E /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +414,7 @@
 				06A1C8171DD3D171005B9D34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		06A1C8181DD3D171005B9D34 /* Build configuration list for PBXNativeTarget "TinyApiClientTests" */ = {
 			isa = XCConfigurationList;
@@ -418,6 +423,7 @@
 				06A1C81A1DD3D171005B9D34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
