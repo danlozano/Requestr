@@ -20,7 +20,14 @@ public protocol JSONSerializable {
     var json: JSONDictionary { get }
 }
 
-public struct JSON {
+public protocol JSONValue { }
+extension Array: JSONValue { }
+extension Dictionary: JSONValue { }
+extension String: JSONValue { }
+extension Bool: JSONValue { }
+extension Int: JSONValue { }
+
+public enum JSON {
 
     public enum DeserializationError: Error {
         case missingAttribute(key: String)
@@ -28,7 +35,7 @@ public struct JSON {
         case invalidAttribute(key: String)
     }
 
-    static func decode<T>(_ dictionary: JSONDictionary, key: String) throws -> T {
+    static func decode<T: JSONValue>(_ dictionary: JSONDictionary, key: String) throws -> T {
         guard let value = dictionary[key] else {
             throw JSON.DeserializationError.missingAttribute(key: key)
         }
