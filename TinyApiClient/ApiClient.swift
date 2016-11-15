@@ -8,6 +8,18 @@
 
 import Foundation
 
+enum HTTPMethod: String {
+
+    case GET
+    case POST
+    case PUT
+    case PATCH
+    case DELETE
+
+}
+
+typealias URLParameters = [String : String]
+
 public class ApiClient {
 
     let configuration: URLSessionConfiguration
@@ -32,6 +44,20 @@ public class ApiClient {
     // MARK: - Public HTTP Methods
 
     func test() {
+
+        let user = User(name: "Daniel Lozano", age: 27, date: Date())
+
+        POST("/user", rootKey: "user", body: user) { (result: ApiResult<User>) in
+            switch result {
+            case .success(let resource):
+                let user = resource.item
+                let pagination = resource.pagination
+                let headers = resource.headers
+                print("SUCCESS: \(user) : \(pagination) : \(headers)")
+            default:
+                break
+            }
+        }
 
         GET("/post", rootKey: "user") { (result: ApiResult<User>) in
             switch result {
@@ -59,8 +85,15 @@ public class ApiClient {
 
     }
 
-    func GET<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: [String: String]? = nil, completion: @escaping (ApiResult<T>) -> Void) {
-        guard let request = makeRequest(address: address, params: params) else {
+    func GET<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, completion: @escaping (ApiResult<T>) -> Void) {
+        guard let request = makeGetRequest(address: address, params: params) else {
+            return
+        }
+        fetchResource(request: request, rootKey: rootKey, completion: completion)
+    }
+
+    func POST<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
+        guard let request = makeRequest(address: address, params: params, httpMethod: .POST, body: body) else {
             return
         }
         fetchResource(request: request, rootKey: rootKey, completion: completion)
@@ -72,14 +105,36 @@ public class ApiClient {
 
 private extension ApiClient {
 
-    func makeRequest(address: String, params: [String: String]? = nil) -> URLRequest? {
+    func makeGetRequest(address: String, params: URLParameters? = nil) -> URLRequest? {
         guard let url = makeURL(address: address, params: params) else {
             return nil
         }
+
         return URLRequest(url: url)
     }
 
-    func makeURL(address: String, params: [String: String]?) -> URL? {
+    func makeRequest(address: String, params: URLParameters?, httpMethod: HTTPMethod, body: JSONSerializable?) -> URLRequest? {
+        do {
+            guard let url = makeURL(address: address, params: params) else {
+                return nil
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = httpMethod.rawValue
+            if let body = body {
+                let json = body.json
+                let bodyData = try JSONSerialization.data(withJSONObject: json, options: [])
+                request.httpBody = bodyData
+            }
+
+            return request
+        } catch {
+            print("ERROR CONVERTING BODY TO JSON")
+            return nil
+        }
+    }
+
+    func makeURL(address: String, params: URLParameters?) -> URL? {
         guard let params = params else {
             return URL(string: address)
         }

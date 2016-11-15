@@ -8,7 +8,15 @@
 
 import Foundation
 
-struct User {
+struct User: JSONSerializable {
+
+    var json: JSONDictionary {
+        return [
+            "name" : name,
+            "age" : age,
+            "date" : date
+        ]
+    }
 
     let name: String
     let age: Int
