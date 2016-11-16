@@ -27,7 +27,7 @@ public class ApiClient {
         return URLSession(configuration: self.configuration)
     }()
 
-    var loggingEnabled = false
+    public var loggingEnabled = false
     fileprivate var currentTasks: Set<URLSessionDataTask> = []
 
     public init(configuration: URLSessionConfiguration) {
@@ -46,6 +46,10 @@ public class ApiClient {
     func test() {
 
         let user = User(name: "Daniel Lozano", age: 27, date: Date())
+
+        DELETE("/user/123", rootKey: "user", body: nil) { (result: ApiResult<User>) in
+            
+        }
 
         POST("/user", rootKey: "user", body: user) { (result: ApiResult<User>) in
             switch result {
@@ -86,37 +90,71 @@ public class ApiClient {
     }
 
     func GET<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, completion: @escaping (ApiResult<T>) -> Void) {
-        guard let request = makeGetRequest(address: address, params: params) else {
-            return
-        }
-        fetchResource(request: request, rootKey: rootKey, completion: completion)
+        performRequest(address: address,
+                       httpMethod: .GET,
+                       rootKey: rootKey,
+                       params: params,
+                       body: nil,
+                       completion: completion)
     }
 
     func POST<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
-        guard let request = makeRequest(address: address, params: params, httpMethod: .POST, body: body) else {
-            return
-        }
-        fetchResource(request: request, rootKey: rootKey, completion: completion)
+        performRequest(address: address,
+                       httpMethod: .POST,
+                       rootKey: rootKey,
+                       params: params,
+                       body: body,
+                       completion: completion)
+    }
+
+    func PUT<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
+        performRequest(address: address,
+                       httpMethod: .PUT,
+                       rootKey: rootKey,
+                       params: params,
+                       body: body,
+                       completion: completion)
+    }
+
+    func PATCH<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
+        performRequest(address: address,
+                       httpMethod: .PATCH,
+                       rootKey: rootKey,
+                       params: params,
+                       body: body,
+                       completion: completion)
+    }
+
+    func DELETE<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
+        performRequest(address: address,
+                       httpMethod: .DELETE,
+                       rootKey: rootKey,
+                       params: params,
+                       body: body,
+                       completion: completion)
     }
 
 }
 
-// MARK: - URL Helper's
+// MARK: - Request / URL Helper's
 
 private extension ApiClient {
 
-    func makeGetRequest(address: String, params: URLParameters? = nil) -> URLRequest? {
-        guard let url = makeURL(address: address, params: params) else {
-            return nil
+    func performRequest<T: JSONDeserializable>(address: String, httpMethod: HTTPMethod, rootKey: String?, params: URLParameters?, body: JSONSerializable?, completion: @escaping (ApiResult<T>) -> Void) {
+        guard let request = makeRequest(address: address, params: params, httpMethod: httpMethod, body: body) else {
+            return
         }
-
-        return URLRequest(url: url)
+        fetchResource(request: request, rootKey: rootKey, completion: completion)
     }
 
     func makeRequest(address: String, params: URLParameters?, httpMethod: HTTPMethod, body: JSONSerializable?) -> URLRequest? {
         do {
             guard let url = makeURL(address: address, params: params) else {
                 return nil
+            }
+
+            guard httpMethod != .GET else {
+                return URLRequest(url: url)
             }
 
             var request = URLRequest(url: url)
