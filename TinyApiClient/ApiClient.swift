@@ -26,7 +26,7 @@ public class ApiClient {
     lazy var urlSession: URLSession = {
         return URLSession(configuration: self.configuration)
     }()
-
+    
     public var loggingEnabled = false
     fileprivate var currentTasks: Set<URLSessionDataTask> = []
 
@@ -45,13 +45,38 @@ public class ApiClient {
 
     func test() {
 
-        let user = User(name: "Daniel Lozano", age: 27, date: Date())
+        let friend = Friend(name: "Daniel's friend")
+        let user = User(name: "Daniel Lozano", age: 27, date: Date(), friend: friend)
 
         DELETE("/user/123", rootKey: "user", body: nil) { (result: ApiResult<User>) in
-            
+
         }
 
-        POST("/user", rootKey: "user", body: user) { (result: ApiResult<User>) in
+        POST("/user", rootKey: "user", body: user) { (result: ApiResult<EmptyResult>) in
+            switch result {
+            case .success(let resource):
+                let user = resource.item
+                let pagination = resource.pagination
+                let headers = resource.headers
+                print("SUCCESS: \(user) : \(pagination) : \(headers)")
+            default:
+                break
+            }
+        }
+
+        GET("/users", rootKey: "users") { (result: ApiResult<[User]>) in
+            switch result {
+            case .success(let resource):
+                let users = resource.item
+                let pagination = resource.pagination
+                let headers = resource.headers
+                print("SUCCESS: \(users) : \(pagination) : \(headers)")
+            default:
+                break
+            }
+        }
+
+        GET("/user", params: ["thing" : "thing"]) { (result: ApiResult<User>) in
             switch result {
             case .success(let resource):
                 let user = resource.item
@@ -75,7 +100,7 @@ public class ApiClient {
             }
         }
 
-        GET("/post") { (result: ApiResult<User>) in
+        GET("/user") { (result: ApiResult<User>) in
             switch result {
             case .success(let resource):
                 let user = resource.item
@@ -89,6 +114,9 @@ public class ApiClient {
 
     }
 
+    // MARK: - GET
+
+    // GET Item
     func GET<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, completion: @escaping (ApiResult<T>) -> Void) {
         performRequest(address: address,
                        httpMethod: .GET,
@@ -98,6 +126,29 @@ public class ApiClient {
                        completion: completion)
     }
 
+    // GET Array
+    func GET<T: JSONDeserializable>(_ address: String, rootKey: String, params: URLParameters? = nil, completion: @escaping (ApiResult<[T]>) -> Void) {
+        performRequest(address: address,
+                       httpMethod: .GET,
+                       rootKey: rootKey,
+                       params: params,
+                       body: nil,
+                       completion: completion)
+    }
+
+    // MARK: - POST
+
+    // POST with empty response
+    func POST(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<EmptyResult>) -> Void) {
+        performRequest(address: address,
+                       httpMethod: .POST,
+                       rootKey: rootKey,
+                       params: params,
+                       body: body,
+                       completion: completion)
+    }
+
+    // POST with resource as response
     func POST<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
         performRequest(address: address,
                        httpMethod: .POST,
@@ -124,7 +175,7 @@ public class ApiClient {
                        body: body,
                        completion: completion)
     }
-
+    
     func DELETE<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
         performRequest(address: address,
                        httpMethod: .DELETE,
@@ -140,11 +191,25 @@ public class ApiClient {
 
 private extension ApiClient {
 
+    func performRequest(address: String, httpMethod: HTTPMethod, rootKey: String?, params: URLParameters?, body: JSONSerializable?, completion: @escaping (ApiResult<EmptyResult>) -> Void) {
+        guard let request = makeRequest(address: address, params: params, httpMethod: httpMethod, body: body) else {
+            return
+        }
+        emptyFetch(request: request, completion: completion)
+    }
+
     func performRequest<T: JSONDeserializable>(address: String, httpMethod: HTTPMethod, rootKey: String?, params: URLParameters?, body: JSONSerializable?, completion: @escaping (ApiResult<T>) -> Void) {
         guard let request = makeRequest(address: address, params: params, httpMethod: httpMethod, body: body) else {
             return
         }
         fetchResource(request: request, rootKey: rootKey, completion: completion)
+    }
+
+    func performRequest<T: JSONDeserializable>(address: String, httpMethod: HTTPMethod, rootKey: String, params: URLParameters?, body: JSONSerializable?, completion: @escaping (ApiResult<[T]>) -> Void) {
+        guard let request = makeRequest(address: address, params: params, httpMethod: httpMethod, body: body) else {
+            return
+        }
+        fetchCollection(request: request, rootKey: rootKey, completion: completion)
     }
 
     func makeRequest(address: String, params: URLParameters?, httpMethod: HTTPMethod, body: JSONSerializable?) -> URLRequest? {
@@ -217,7 +282,8 @@ private extension ApiClient {
             }
 
             if let finalJSON = finalJSON {
-                resource = try? JSON.decode(finalJSON)
+                // resource = try? JSON.decode(finalJSON)
+                resource = try? T(json: finalJSON)
             }
 
             return (resource: resource, pagination: nil)
@@ -229,8 +295,8 @@ private extension ApiClient {
         fetch(request: request, parseBlock: { (json) -> (resource: [T]?, pagination: PaginationInfo?) in
             if let rootJSON = json as? JSONDictionary {
                 var resources: [T]?
-                if let values: [JSONDictionary] = try? JSON.decode(rootJSON, key: rootKey) {
-                    resources = values.flatMap { try? JSON.decode($0) }
+                if let values: [JSONDictionary] = try? rootJSON.decode(key: rootKey) {
+                    resources = values.flatMap { try? T(json: $0) } // JSON.decode($0)
                 }
                 return (resource: resources, pagination: nil)
             }else{
@@ -248,7 +314,6 @@ typealias JsonTaskCompletionHandler = (Any?, HTTPURLResponse?, Error?) -> Void
 private extension ApiClient {
 
     func fetch<T>(request: URLRequest, parseBlock: @escaping (Any) -> (resource: T?, pagination: PaginationInfo?), completion: @escaping (ApiResult<T>) -> Void) {
-
         ActivityManager.incrementActivityCount()
 
         let task = jsonTaskWithRequest(request: request as URLRequest) { (json, response, error) in
@@ -278,7 +343,8 @@ private extension ApiClient {
         }
     }
 
-    func handleResponse<T>(response: HTTPURLResponse, json: Any,
+    func handleResponse<T>(response: HTTPURLResponse,
+                        json: Any,
                         parseBlock: (Any) -> (resource: T?, pagination: PaginationInfo?),
                         completion: (ApiResult<T>) -> Void) {
         switch response.statusCode {
@@ -311,11 +377,10 @@ private extension ApiClient {
     // MARK: NSURLSession - Data Task
 
     func jsonTaskWithRequest(request: URLRequest, completion: @escaping JsonTaskCompletionHandler) -> URLSessionDataTask {
-        var task: URLSessionDataTask?
+        var task: URLSessionDataTask!
         task = urlSession.dataTask(with: request, completionHandler: { (data, response, error) in
-            self.currentTasks.remove(task!) // swiftlint:disable:this force_unwrapping
+            self.currentTasks.remove(task)
             let http = response as? HTTPURLResponse
-
             if let error = error {
                 self.debugLog(msg: "Received an error from HTTP \(request.httpMethod ?? "") to \(request.url?.absoluteString)")
                 self.debugLog(msg: "Error: \(error)")
@@ -337,8 +402,8 @@ private extension ApiClient {
             }
 
         })
-        currentTasks.insert(task!) // swiftlint:disable:this force_unwrapping
-        return task! // swiftlint:disable:this force_unwrapping
+        currentTasks.insert(task)
+        return task
     }
 
 }
