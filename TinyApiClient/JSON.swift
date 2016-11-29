@@ -35,7 +35,7 @@ public enum JSONDeserializationError: Error {
 
 extension Dictionary where Key: CustomStringConvertible, Value: Any {
 
-    func decode<T: JSONValue>(key: Key) throws -> T {
+    public func decode<T: JSONValue>(_ key: Key) throws -> T {
         guard let value = self[key] else {
             throw JSONDeserializationError.missingAttribute(key: key.description)
         }
@@ -47,17 +47,17 @@ extension Dictionary where Key: CustomStringConvertible, Value: Any {
         return attribute
     }
 
-    func decode<T: JSONDeserializable>(key: Key) throws -> T {
-        let value: JSONDictionary = try decode(key: key)
+    public func decode<T: JSONDeserializable>(_ key: Key) throws -> T {
+        let value: JSONDictionary = try decode(key)
         return try decode(value)
     }
 
-    func decode<T: JSONDeserializable>(key: Key) throws -> [T] {
-        let values: [JSONDictionary] = try decode(key: key)
+    public func decode<T: JSONDeserializable>(_ key: Key) throws -> [T] {
+        let values: [JSONDictionary] = try decode(key)
         return values.flatMap { try? decode($0) }
     }
 
-    func decode<T: JSONDeserializable>(_ dictionary: JSONDictionary) throws -> T {
+    public func decode<T: JSONDeserializable>(_ dictionary: JSONDictionary) throws -> T {
         return try T.init(json: dictionary)
     }
 
@@ -65,7 +65,7 @@ extension Dictionary where Key: CustomStringConvertible, Value: Any {
 
 extension Dictionary where Key: CustomStringConvertible, Value: Any {
 
-    func decode(key: Key) throws -> Date {
+    public func decode(_ key: Key) throws -> Date {
         guard let value = self[key] else {
             throw JSONDeserializationError.missingAttribute(key: key.description)
         }

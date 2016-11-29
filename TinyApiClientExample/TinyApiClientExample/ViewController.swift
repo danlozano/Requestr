@@ -13,7 +13,7 @@ class ViewController: UIViewController {
 
     let service: RemotelyService = {
         let apiClient = ApiClient(configuration: .default)
-        apiClient.loggingEnabled = true
+        // apiClient.loggingEnabled = true
         let service = RemotelyService(apiClient: apiClient)
         return service
     }()
@@ -22,10 +22,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         let login = LoginRequest(email: "daniel@icalialabs.com", password: "password")
+
         service.login(loginRequest: login) { (result) in
             switch result {
-            case .success(let user, _):
+            case .success(let user, let meta):
                 print("SUCCESS: USER = \(user)")
+                print("ACCESS TOKEN = \(meta.headers?["Accesstoken"])")
             default:
                 print("ERROR")
             }

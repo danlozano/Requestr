@@ -8,13 +8,13 @@
 
 import Foundation
 
-public struct User: JSONSerializable {
+struct User: JSONSerializable {
 
-    public let name: String
-    public let age: Int
-    public let date: Date
+    let name: String
+    let age: Int
+    let date: Date
 
-    public var json: JSONDictionary {
+    var json: JSONDictionary {
         return [
             "name" : name,
             "age" : age,
@@ -22,7 +22,7 @@ public struct User: JSONSerializable {
         ]
     }
 
-    public init(name: String, age: Int, date: Date) {
+    init(name: String, age: Int, date: Date) {
         self.name = name
         self.age = age
         self.date = date
@@ -32,10 +32,10 @@ public struct User: JSONSerializable {
 
 extension User: JSONDeserializable {
 
-    public init(json: JSONDictionary) throws {
-        name = try json.decode(key: "name")
-        age = try json.decode(key: "age")
-        date = try json.decode(key: "date")
+    init(json: JSONDictionary) throws {
+        name = try json.decode("name")
+        age = try json.decode("age")
+        date = try json.decode("date")
     }
     
 }

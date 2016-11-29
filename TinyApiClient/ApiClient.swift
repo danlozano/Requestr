@@ -20,7 +20,12 @@ public typealias URLParameters = [String : String]
 
 public class ApiClient {
 
-    let configuration: URLSessionConfiguration
+    let configuration: URLSessionConfiguration = {
+        let config = URLSessionConfiguration.default
+        config.httpAdditionalHeaders = ["Content-Type" : "application/json; charset=utf-8"]
+        return config
+    }()
+
     lazy var urlSession: URLSession = {
         return URLSession(configuration: self.configuration)
     }()
@@ -29,7 +34,7 @@ public class ApiClient {
     fileprivate var currentTasks: Set<URLSessionDataTask> = []
 
     public init(configuration: URLSessionConfiguration) {
-        self.configuration = configuration
+        // self.configuration = configuration
     }
 
     func cancelAllRequests() {
@@ -232,7 +237,7 @@ private extension ApiClient {
         fetch(request: request, parseBlock: { (json) -> (resource: [T]?, pagination: PaginationInfo?) in
             if let rootJSON = json as? JSONDictionary {
                 var resources: [T]?
-                if let values: [JSONDictionary] = try? rootJSON.decode(key: rootKey) {
+                if let values: [JSONDictionary] = try? rootJSON.decode(rootKey) {
                     resources = values.flatMap { try? T(json: $0) } // JSON.decode($0)
                 }
                 return (resource: resources, pagination: nil)

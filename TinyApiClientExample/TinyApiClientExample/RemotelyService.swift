@@ -35,6 +35,29 @@ enum Endpoints {
 
 }
 
+public struct User {
+
+    let id: String
+    let email: String
+    let name: String
+
+}
+
+extension User: JSONDeserializable, JSONSerializable {
+
+    public var json: JSONDictionary {
+        return ["email" : email,
+                "name" : name]
+    }
+
+    public init(json: JSONDictionary) throws {
+        id = try json.decode("id")
+        email = try json.decode("email")
+        name = try json.decode("name")
+    }
+
+}
+
 public struct LoginRequest: JSONSerializable {
 
     let email: String
@@ -71,7 +94,7 @@ private extension RemotelyService {
 
     func test() {
 
-        let user = User(name: "Daniel Lozano", age: 27, date: Date())
+        let user = User(id: "", email: "", name: "")
 
         apiClient.DELETE("/user/123", rootKey: "user", body: nil) { (result: ApiResult<User>) in
 
