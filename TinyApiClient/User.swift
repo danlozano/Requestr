@@ -8,49 +8,34 @@
 
 import Foundation
 
-struct Friend: JSONSerializable {
+public struct User: JSONSerializable {
 
-    let name: String
+    public let name: String
+    public let age: Int
+    public let date: Date
 
-    var json: JSONDictionary {
-        return ["name" : name]
-    }
-
-}
-
-extension Friend: JSONDeserializable{
-
-    init(json: JSONDictionary) throws {
-        name = try json.decode(key: "name")
-    }
-
-}
-
-struct User: JSONSerializable {
-
-    let name: String
-    let age: Int
-    let date: Date
-    let friend: Friend
-
-    var json: JSONDictionary {
+    public var json: JSONDictionary {
         return [
             "name" : name,
             "age" : age,
-            "date" : date,
-            "friend" : friend
+            "date" : date
         ]
+    }
+
+    public init(name: String, age: Int, date: Date) {
+        self.name = name
+        self.age = age
+        self.date = date
     }
 
 }
 
 extension User: JSONDeserializable {
 
-    init(json: JSONDictionary) throws {
+    public init(json: JSONDictionary) throws {
         name = try json.decode(key: "name")
         age = try json.decode(key: "age")
         date = try json.decode(key: "date")
-        friend = try json.decode(key: "friend")
     }
     
 }

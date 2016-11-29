@@ -9,16 +9,14 @@
 import Foundation
 
 enum HTTPMethod: String {
-
     case GET
     case POST
     case PUT
     case PATCH
     case DELETE
-
 }
 
-typealias URLParameters = [String : String]
+public typealias URLParameters = [String : String]
 
 public class ApiClient {
 
@@ -41,80 +39,13 @@ public class ApiClient {
         currentTasks = []
     }
 
-    // MARK: - Public HTTP Methods
+}
 
-    func test() {
+// MARK: - REST API
 
-        let friend = Friend(name: "Daniel's friend")
-        let user = User(name: "Daniel Lozano", age: 27, date: Date(), friend: friend)
+public extension ApiClient {
 
-        DELETE("/user/123", rootKey: "user", body: nil) { (result: ApiResult<User>) in
-
-        }
-
-        POST("/user", rootKey: "user", body: user) { (result: ApiResult<EmptyResult>) in
-            switch result {
-            case .success(let resource):
-                let user = resource.item
-                let pagination = resource.pagination
-                let headers = resource.headers
-                print("SUCCESS: \(user) : \(pagination) : \(headers)")
-            default:
-                break
-            }
-        }
-
-        GET("/users", rootKey: "users") { (result: ApiResult<[User]>) in
-            switch result {
-            case .success(let resource):
-                let users = resource.item
-                let pagination = resource.pagination
-                let headers = resource.headers
-                print("SUCCESS: \(users) : \(pagination) : \(headers)")
-            default:
-                break
-            }
-        }
-
-        GET("/user", params: ["thing" : "thing"]) { (result: ApiResult<User>) in
-            switch result {
-            case .success(let resource):
-                let user = resource.item
-                let pagination = resource.pagination
-                let headers = resource.headers
-                print("SUCCESS: \(user) : \(pagination) : \(headers)")
-            default:
-                break
-            }
-        }
-
-        GET("/post", rootKey: "user") { (result: ApiResult<User>) in
-            switch result {
-            case .success(let resource):
-                let user = resource.item
-                let pagination = resource.pagination
-                let headers = resource.headers
-                print("SUCCESS: \(user) : \(pagination) : \(headers)")
-            default:
-                break
-            }
-        }
-
-        GET("/user") { (result: ApiResult<User>) in
-            switch result {
-            case .success(let resource):
-                let user = resource.item
-                let pagination = resource.pagination
-                let headers = resource.headers
-                print("SUCCESS: \(user) : \(pagination) : \(headers)")
-            default:
-                break
-            }
-        }
-
-    }
-
-    // MARK: - GET
+    // MARK: GET
 
     // GET Item
     func GET<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, completion: @escaping (ApiResult<T>) -> Void) {
@@ -136,7 +67,7 @@ public class ApiClient {
                        completion: completion)
     }
 
-    // MARK: - POST
+    // MARK: POST
 
     // POST with empty response
     func POST(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<EmptyResult>) -> Void) {
@@ -158,6 +89,8 @@ public class ApiClient {
                        completion: completion)
     }
 
+    // MARK: PUT
+
     func PUT<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
         performRequest(address: address,
                        httpMethod: .PUT,
@@ -167,6 +100,8 @@ public class ApiClient {
                        completion: completion)
     }
 
+    // MARK: PATCH
+
     func PATCH<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
         performRequest(address: address,
                        httpMethod: .PATCH,
@@ -175,7 +110,9 @@ public class ApiClient {
                        body: body,
                        completion: completion)
     }
-    
+
+    // MARK: DELETE
+
     func DELETE<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
         performRequest(address: address,
                        httpMethod: .DELETE,
@@ -309,7 +246,7 @@ private extension ApiClient {
 
 // MARK: - Fetching
 
-typealias JsonTaskCompletionHandler = (Any?, HTTPURLResponse?, Error?) -> Void
+private typealias JsonTaskCompletionHandler = (Any?, HTTPURLResponse?, Error?) -> Void
 
 private extension ApiClient {
 
@@ -352,8 +289,8 @@ private extension ApiClient {
             let parseResult = parseBlock(json)
             if let resource = parseResult.resource {
                 let headers = response.allHeaderFields as? Dictionary<String, Any>
-                let resource = Resource(item: resource, pagination: parseResult.pagination, headers: headers)
-                completion(.success(resource: resource))
+                let metadata = Metadata(pagination: parseResult.pagination, headers: headers)
+                completion(.success(resource: resource, meta: metadata))
             } else {
                 print("API CLIENT: WARNING: Couldn't parse the following JSON as a \(T.self)")
                 print(json)
@@ -374,7 +311,7 @@ private extension ApiClient {
         }
     }
 
-    // MARK: NSURLSession - Data Task
+    // MARK: NSURLSession - Data Task Creation
 
     func jsonTaskWithRequest(request: URLRequest, completion: @escaping JsonTaskCompletionHandler) -> URLSessionDataTask {
         var task: URLSessionDataTask!
