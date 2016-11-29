@@ -27,6 +27,12 @@ extension String: JSONValue { }
 extension Bool: JSONValue { }
 extension Int: JSONValue { }
 
+public enum JSONDeserializationError: Error {
+    case missingAttribute(key: String)
+    case invalidAttributeType(key: String, expectedType: Any.Type, receivedValue: Any)
+    case invalidAttribute(key: String)
+}
+
 extension Dictionary where Key: CustomStringConvertible, Value: Any {
 
     func decode<T: JSONValue>(key: Key) throws -> T {
@@ -85,12 +91,6 @@ extension Dictionary where Key: CustomStringConvertible, Value: Any {
         throw JSONDeserializationError.invalidAttributeType(key: key.description, expectedType: String.self, receivedValue: value)
     }
     
-}
-
-public enum JSONDeserializationError: Error {
-    case missingAttribute(key: String)
-    case invalidAttributeType(key: String, expectedType: Any.Type, receivedValue: Any)
-    case invalidAttribute(key: String)
 }
 
 //public enum JSON {

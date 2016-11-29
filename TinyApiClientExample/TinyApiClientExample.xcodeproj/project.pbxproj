@@ -15,6 +15,7 @@
 		0651CA351DEDF494003C11BA /* TinyApiClientExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0651CA341DEDF494003C11BA /* TinyApiClientExampleTests.swift */; };
 		0651CA401DEDF494003C11BA /* TinyApiClientExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0651CA3F1DEDF494003C11BA /* TinyApiClientExampleUITests.swift */; };
 		0651CA4E1DEDF4FA003C11BA /* TinyApiClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0651CA4D1DEDF4FA003C11BA /* TinyApiClient.framework */; };
+		0651CA501DEDFB51003C11BA /* RemotelyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0651CA4F1DEDFB51003C11BA /* RemotelyService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		0651CA3F1DEDF494003C11BA /* TinyApiClientExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyApiClientExampleUITests.swift; sourceTree = "<group>"; };
 		0651CA411DEDF494003C11BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0651CA4D1DEDF4FA003C11BA /* TinyApiClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TinyApiClient.framework; path = "../../../Library/Developer/Xcode/DerivedData/TinyApiClient-bpsdvyxxenlxiycsrvxnqptdssfd/Build/Products/Debug-iphonesimulator/TinyApiClient.framework"; sourceTree = "<group>"; };
+		0651CA4F1DEDFB51003C11BA /* RemotelyService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotelyService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,9 +103,10 @@
 		0651CA1E1DEDF494003C11BA /* TinyApiClientExample */ = {
 			isa = PBXGroup;
 			children = (
-				0651CA1F1DEDF494003C11BA /* AppDelegate.swift */,
 				0651CA211DEDF494003C11BA /* ViewController.swift */,
+				0651CA4F1DEDFB51003C11BA /* RemotelyService.swift */,
 				0651CA231DEDF494003C11BA /* Main.storyboard */,
+				0651CA1F1DEDF494003C11BA /* AppDelegate.swift */,
 				0651CA261DEDF494003C11BA /* Assets.xcassets */,
 				0651CA281DEDF494003C11BA /* LaunchScreen.storyboard */,
 				0651CA2B1DEDF494003C11BA /* Info.plist */,
@@ -263,6 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0651CA501DEDFB51003C11BA /* RemotelyService.swift in Sources */,
 				0651CA221DEDF494003C11BA /* ViewController.swift in Sources */,
 				0651CA201DEDF494003C11BA /* AppDelegate.swift in Sources */,
 			);
