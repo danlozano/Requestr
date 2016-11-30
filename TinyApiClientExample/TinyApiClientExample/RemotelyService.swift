@@ -10,18 +10,16 @@ import Foundation
 import TinyApiClient
 
 public protocol RemotelyService {
-    func login(loginRequest: LoginRequest, completion: @escaping (RemotelyResult<User>) -> Void)
     func users(completion: @escaping (RemotelyResult<[User]>) -> Void)
 }
 
 public enum RemotelyResult<T> {
-    case success(resource: T, metadata: Metadata)
+    case success(resource: T, metadata: RemotelyMetadata)
     case error(message: String)
 }
 
-public struct Metadata {
+public struct RemotelyMetadata {
     let pagination: PaginationInfo?
-    let accessToken: String?
 }
 
 public class RemotelyAPIService: RemotelyService {
@@ -57,27 +55,26 @@ private extension RemotelyAPIService {
         switch apiResult {
         case .success(let resource, let meta):
             let pagination = meta.pagination
-            let accessToken = meta.headers?["Accesstoken"] as? String
-            let metadata = Metadata(pagination: pagination, accessToken: accessToken)
+            let metadata = RemotelyMetadata(pagination: pagination)
             return .success(resource: resource, metadata: metadata)
         case .cancelled:
-            return .error(message: "")
+            return .error(message: "cancelled")
         case .clientError(let errorCode):
-            return .error(message: "\(errorCode)")
+            return .error(message: "client error = \(errorCode)")
         case .serverError(let errorCode):
-            return .error(message: "\(errorCode)")
+            return .error(message: "server error = \(errorCode)")
         case .error(let error):
-            return .error(message: "\(error)")
+            return .error(message: "error = \(error)")
         case .invalidCredentials:
-            return .error(message: "")
+            return .error(message: "invalid credentials")
         case .invalidToken:
-            return .error(message: "")
+            return .error(message: "invalid token")
         case .notFound:
-            return .error(message: "")
+            return .error(message: "not found")
         case .unexpectedResponse(let response):
-            return .error(message: "\(response)")
+            return .error(message: "unexpected response \(response)")
         case .unknownError:
-            return .error(message: "")
+            return .error(message: "unkown error")
         }
     }
 

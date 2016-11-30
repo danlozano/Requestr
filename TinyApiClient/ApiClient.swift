@@ -20,24 +20,34 @@ public typealias URLParameters = [String : String]
 
 public class ApiClient {
 
-    let configuration: URLSessionConfiguration = {
+    lazy var urlSession: URLSession = {
+        return URLSession(configuration: self.configuration)
+    }()
+
+    lazy var configuration: URLSessionConfiguration = {
         let config = URLSessionConfiguration.default
         config.httpAdditionalHeaders = ["Content-Type" : "application/json; charset=utf-8"]
         return config
     }()
-
-    lazy var urlSession: URLSession = {
-        return URLSession(configuration: self.configuration)
-    }()
     
     public var loggingEnabled = false
+
     fileprivate var currentTasks: Set<URLSessionDataTask> = []
 
-    public init(configuration: URLSessionConfiguration) {
-        // self.configuration = configuration
+    public init(configuration: URLSessionConfiguration?) {
+        if let config = configuration {
+            self.configuration = config
+        }
     }
 
-    func cancelAllRequests() {
+    public func setAccessToken(token: String) {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = ["Authorization" : "Bearer \(token)",
+                                              "Content-Type" : "application/json; charset=utf-8"]
+        urlSession = URLSession(configuration: configuration)
+    }
+
+    public func cancelAllRequests() {
         for task in currentTasks {
             task.cancel()
         }

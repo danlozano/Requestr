@@ -11,35 +11,39 @@ import TinyApiClient
 
 class ViewController: UIViewController {
 
-    let service: RemotelyService = {
-        let apiClient = ApiClient(configuration: .default)
-        // apiClient.loggingEnabled = true
-        let service = RemotelyAPIService(apiClient: apiClient)
+    let apiClient = ApiClient(configuration: nil)
+
+    lazy var service: RemotelyService = {
+        let service = RemotelyAPIService(apiClient: self.apiClient)
+        return service
+    }()
+
+    lazy var authService: AuthService = {
+        let service = AuthApiService(apiClient: self.apiClient)
         return service
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        login()
+    }
 
+    func login() {
         let login = LoginRequest(email: "daniel@icalialabs.com", password: "password")
-        var accessToken: String?
-
-        service.login(loginRequest: login) { (result) in
+        authService.login(loginRequest: login) { (result) in
             switch result {
-            case .success(let resource, let metadata):
-                print("SUCCESS: USER = \(resource)")
-                accessToken = metadata.accessToken
-                print("ACCESS TOKEN = \(accessToken)")
+            case .success(let user, let token):
+                print("SUCCESS: USER = \(user)")
+                print("ACCESS TOKEN = \(token)")
+                self.getUser(token: token)
             case .error(let message):
                 print("ERROR: \(message)")
             }
         }
+    }
 
-        guard let token = accessToken else {
-            print("NO ACCESS TOKEN; RETURNING;")
-            return
-        }
-
+    func getUser(token: String) {
+        apiClient.setAccessToken(token: token)
         service.users() { (result) in
             switch result {
             case .success(let resource, _):
@@ -48,7 +52,6 @@ class ViewController: UIViewController {
                 print("ERROR: \(message)")
             }
         }
-
     }
 
     override func didReceiveMemoryWarning() {
