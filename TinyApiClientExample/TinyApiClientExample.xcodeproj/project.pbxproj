@@ -16,6 +16,9 @@
 		0651CA401DEDF494003C11BA /* TinyApiClientExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0651CA3F1DEDF494003C11BA /* TinyApiClientExampleUITests.swift */; };
 		0651CA4E1DEDF4FA003C11BA /* TinyApiClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0651CA4D1DEDF4FA003C11BA /* TinyApiClient.framework */; };
 		0651CA501DEDFB51003C11BA /* RemotelyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0651CA4F1DEDFB51003C11BA /* RemotelyService.swift */; };
+		066618E91DEF5141006D5E10 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066618E81DEF5141006D5E10 /* Endpoints.swift */; };
+		066618EC1DEF516E006D5E10 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066618EB1DEF516E006D5E10 /* User.swift */; };
+		066618EE1DEF5185006D5E10 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066618ED1DEF5185006D5E10 /* LoginRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +54,9 @@
 		0651CA411DEDF494003C11BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0651CA4D1DEDF4FA003C11BA /* TinyApiClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TinyApiClient.framework; path = "../../../Library/Developer/Xcode/DerivedData/TinyApiClient-bpsdvyxxenlxiycsrvxnqptdssfd/Build/Products/Debug-iphonesimulator/TinyApiClient.framework"; sourceTree = "<group>"; };
 		0651CA4F1DEDFB51003C11BA /* RemotelyService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotelyService.swift; sourceTree = "<group>"; };
+		066618E81DEF5141006D5E10 /* Endpoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
+		066618EB1DEF516E006D5E10 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		066618ED1DEF5185006D5E10 /* LoginRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,8 +109,8 @@
 		0651CA1E1DEDF494003C11BA /* TinyApiClientExample */ = {
 			isa = PBXGroup;
 			children = (
+				066618EA1DEF514A006D5E10 /* Remotely */,
 				0651CA211DEDF494003C11BA /* ViewController.swift */,
-				0651CA4F1DEDFB51003C11BA /* RemotelyService.swift */,
 				0651CA231DEDF494003C11BA /* Main.storyboard */,
 				0651CA1F1DEDF494003C11BA /* AppDelegate.swift */,
 				0651CA261DEDF494003C11BA /* Assets.xcassets */,
@@ -130,6 +136,17 @@
 				0651CA411DEDF494003C11BA /* Info.plist */,
 			);
 			path = TinyApiClientExampleUITests;
+			sourceTree = "<group>";
+		};
+		066618EA1DEF514A006D5E10 /* Remotely */ = {
+			isa = PBXGroup;
+			children = (
+				0651CA4F1DEDFB51003C11BA /* RemotelyService.swift */,
+				066618E81DEF5141006D5E10 /* Endpoints.swift */,
+				066618EB1DEF516E006D5E10 /* User.swift */,
+				066618ED1DEF5185006D5E10 /* LoginRequest.swift */,
+			);
+			name = Remotely;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,6 +285,9 @@
 			files = (
 				0651CA501DEDFB51003C11BA /* RemotelyService.swift in Sources */,
 				0651CA221DEDF494003C11BA /* ViewController.swift in Sources */,
+				066618E91DEF5141006D5E10 /* Endpoints.swift in Sources */,
+				066618EE1DEF5185006D5E10 /* LoginRequest.swift in Sources */,
+				066618EC1DEF516E006D5E10 /* User.swift in Sources */,
 				0651CA201DEDF494003C11BA /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,6 +533,7 @@
 				0651CA461DEDF494003C11BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0651CA471DEDF494003C11BA /* Build configuration list for PBXNativeTarget "TinyApiClientExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +542,7 @@
 				0651CA491DEDF494003C11BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0651CA4A1DEDF494003C11BA /* Build configuration list for PBXNativeTarget "TinyApiClientExampleUITests" */ = {
 			isa = XCConfigurationList;
@@ -529,6 +551,7 @@
 				0651CA4C1DEDF494003C11BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

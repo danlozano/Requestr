@@ -9,68 +9,22 @@
 import Foundation
 import TinyApiClient
 
-enum Endpoints {
-
-    static let baseURL = "https://remotelyapi.herokuapp.com"
-
-    case login
-    case me
-    case user(userId: Int)
-    case users
-
-    var fullPath: String {
-        let path: String
-        switch self {
-        case .login:
-            path = "/login"
-        case .me:
-            path = "/api/me"
-        case .user(let userId):
-            path = "/api/users/\(userId)"
-        case .users:
-            path = "/users"
-        }
-        return Endpoints.baseURL + path
-    }
-
+public protocol RemotelyService {
+    func login(loginRequest: LoginRequest, completion: @escaping (RemotelyResult<User>) -> Void)
+    func users(completion: @escaping (RemotelyResult<[User]>) -> Void)
 }
 
-public struct User {
-
-    let id: String
-    let email: String
-    let name: String
-
+public enum RemotelyResult<T> {
+    case success(resource: T, metadata: Metadata)
+    case error(message: String)
 }
 
-extension User: JSONDeserializable, JSONSerializable {
-
-    public var json: JSONDictionary {
-        return ["email" : email,
-                "name" : name]
-    }
-
-    public init(json: JSONDictionary) throws {
-        id = try json.decode("id")
-        email = try json.decode("email")
-        name = try json.decode("name")
-    }
-
+public struct Metadata {
+    let pagination: PaginationInfo?
+    let accessToken: String?
 }
 
-public struct LoginRequest: JSONSerializable {
-
-    let email: String
-    let password: String
-
-    public var json: JSONDictionary {
-        return ["email" : email,
-                "password" : password]
-    }
-
-}
-
-public class RemotelyService {
+public class RemotelyAPIService: RemotelyService {
 
     let apiClient: ApiClient
 
@@ -80,17 +34,52 @@ public class RemotelyService {
 
 }
 
-public extension RemotelyService {
+public extension RemotelyAPIService {
 
-    func login(loginRequest: LoginRequest, completion: @escaping (ApiResult<User>) -> Void) {
-        apiClient.POST(Endpoints.login.fullPath,
-                       body: loginRequest,
-                       completion: completion)
+    func login(loginRequest: LoginRequest, completion: @escaping (RemotelyResult<User>) -> Void) {
+        apiClient.POST(Endpoints.login.fullPath, body: loginRequest) { (apiResult: ApiResult<User>) in
+            completion(self.remotelyResultFor(apiResult: apiResult))
+        }
+    }
+
+    func users(completion: @escaping (RemotelyResult<[User]>) -> Void) {
+        let usersEndpoint = Endpoints.users
+        apiClient.GET(usersEndpoint.fullPath, rootKey: usersEndpoint.rootKey!) { (apiResult: ApiResult<[User]>) in
+            completion(self.remotelyResultFor(apiResult: apiResult))
+        }
     }
 
 }
 
-private extension RemotelyService {
+private extension RemotelyAPIService {
+
+    func remotelyResultFor<T>(apiResult: ApiResult<T>) -> RemotelyResult<T> {
+        switch apiResult {
+        case .success(let resource, let meta):
+            let pagination = meta.pagination
+            let accessToken = meta.headers?["Accesstoken"] as? String
+            let metadata = Metadata(pagination: pagination, accessToken: accessToken)
+            return .success(resource: resource, metadata: metadata)
+        case .cancelled:
+            return .error(message: "")
+        case .clientError(let errorCode):
+            return .error(message: "\(errorCode)")
+        case .serverError(let errorCode):
+            return .error(message: "\(errorCode)")
+        case .error(let error):
+            return .error(message: "\(error)")
+        case .invalidCredentials:
+            return .error(message: "")
+        case .invalidToken:
+            return .error(message: "")
+        case .notFound:
+            return .error(message: "")
+        case .unexpectedResponse(let response):
+            return .error(message: "\(response)")
+        case .unknownError:
+            return .error(message: "")
+        }
+    }
 
     func test() {
 
