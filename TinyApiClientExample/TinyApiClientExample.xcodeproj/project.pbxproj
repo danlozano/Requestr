@@ -20,6 +20,8 @@
 		066618EC1DEF516E006D5E10 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066618EB1DEF516E006D5E10 /* User.swift */; };
 		066618EE1DEF5185006D5E10 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066618ED1DEF5185006D5E10 /* LoginRequest.swift */; };
 		066618F01DEF82F6006D5E10 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066618EF1DEF82F6006D5E10 /* AuthService.swift */; };
+		06C3391F1DF9DEBD00635734 /* SignupRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C3391E1DF9DEBD00635734 /* SignupRequest.swift */; };
+		06C339211DF9E2DD00635734 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C339201DF9E2DD00635734 /* Event.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		066618EB1DEF516E006D5E10 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		066618ED1DEF5185006D5E10 /* LoginRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 		066618EF1DEF82F6006D5E10 /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		06C3391E1DF9DEBD00635734 /* SignupRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupRequest.swift; sourceTree = "<group>"; };
+		06C339201DF9E2DD00635734 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,11 +147,13 @@
 		066618EA1DEF514A006D5E10 /* Remotely */ = {
 			isa = PBXGroup;
 			children = (
+				066618E81DEF5141006D5E10 /* Endpoints.swift */,
 				066618EF1DEF82F6006D5E10 /* AuthService.swift */,
 				0651CA4F1DEDFB51003C11BA /* RemotelyService.swift */,
-				066618E81DEF5141006D5E10 /* Endpoints.swift */,
 				066618EB1DEF516E006D5E10 /* User.swift */,
+				06C339201DF9E2DD00635734 /* Event.swift */,
 				066618ED1DEF5185006D5E10 /* LoginRequest.swift */,
+				06C3391E1DF9DEBD00635734 /* SignupRequest.swift */,
 			);
 			name = Remotely;
 			sourceTree = "<group>";
@@ -287,10 +293,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0651CA501DEDFB51003C11BA /* RemotelyService.swift in Sources */,
+				06C339211DF9E2DD00635734 /* Event.swift in Sources */,
 				0651CA221DEDF494003C11BA /* ViewController.swift in Sources */,
 				066618E91DEF5141006D5E10 /* Endpoints.swift in Sources */,
 				066618EE1DEF5185006D5E10 /* LoginRequest.swift in Sources */,
 				066618EC1DEF516E006D5E10 /* User.swift in Sources */,
+				06C3391F1DF9DEBD00635734 /* SignupRequest.swift in Sources */,
 				0651CA201DEDF494003C11BA /* AppDelegate.swift in Sources */,
 				066618F01DEF82F6006D5E10 /* AuthService.swift in Sources */,
 			);

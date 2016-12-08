@@ -9,8 +9,18 @@
 import Foundation
 
 public struct Metadata {
+
     public let pagination: PaginationInfo?
     public let headers: JSONDictionary?
+
+}
+
+public struct PaginationInfo {
+
+    public var perPage: Int
+    public var totalPages: Int
+    public var totalObjects: Int
+
 }
 
 public enum ApiResult<T> {

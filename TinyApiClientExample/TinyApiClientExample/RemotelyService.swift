@@ -10,16 +10,25 @@ import Foundation
 import TinyApiClient
 
 public protocol RemotelyService {
+
+    func me(completion: @escaping (RemotelyResult<User>) -> Void)
+    func user(userId: String, completion: @escaping (RemotelyResult<User>) -> Void)
     func users(completion: @escaping (RemotelyResult<[User]>) -> Void)
+    func userEvents(completion: @escaping (RemotelyResult<[Event]>) -> Void)
+
 }
 
 public enum RemotelyResult<T> {
+
     case success(resource: T, metadata: RemotelyMetadata)
     case error(message: String)
+
 }
 
 public struct RemotelyMetadata {
+
     let pagination: PaginationInfo?
+
 }
 
 public class RemotelyAPIService: RemotelyService {
@@ -34,9 +43,17 @@ public class RemotelyAPIService: RemotelyService {
 
 public extension RemotelyAPIService {
 
-    func login(loginRequest: LoginRequest, completion: @escaping (RemotelyResult<User>) -> Void) {
-        apiClient.POST(Endpoints.login.fullPath, body: loginRequest) { (apiResult: ApiResult<User>) in
-            completion(self.remotelyResultFor(apiResult: apiResult))
+    func me(completion: @escaping (RemotelyResult<User>) -> Void) {
+        let endpoint = Endpoints.me
+        apiClient.GET(endpoint.fullPath) { (result: ApiResult<User>) in
+            completion(self.remotelyResultFor(apiResult: result))
+        }
+    }
+
+    func user(userId: String, completion: @escaping (RemotelyResult<User>) -> Void) {
+        let endpoint = Endpoints.user(userId: userId)
+        apiClient.GET(endpoint.fullPath) { (result: ApiResult<User>) in
+            completion(self.remotelyResultFor(apiResult: result))
         }
     }
 
@@ -44,6 +61,13 @@ public extension RemotelyAPIService {
         let usersEndpoint = Endpoints.users
         apiClient.GET(usersEndpoint.fullPath, rootKey: usersEndpoint.rootKey!) { (apiResult: ApiResult<[User]>) in
             completion(self.remotelyResultFor(apiResult: apiResult))
+        }
+    }
+
+    func userEvents(completion: @escaping (RemotelyResult<[Event]>) -> Void) {
+        let endpoint = Endpoints.userEvents
+        apiClient.GET(endpoint.fullPath, rootKey: endpoint.rootKey!) { (result: ApiResult<[Event]>) in
+            completion(self.remotelyResultFor(apiResult: result))
         }
     }
 
@@ -76,76 +100,6 @@ private extension RemotelyAPIService {
         case .unknownError:
             return .error(message: "unkown error")
         }
-    }
-
-    func test() {
-
-        let user = User(id: "", email: "", name: "")
-
-        apiClient.DELETE("/user/123", rootKey: "user", body: nil) { (result: ApiResult<User>) in
-
-        }
-
-        apiClient.POST("/user", rootKey: "user", body: user) { (result: ApiResult<EmptyResult>) in
-            switch result {
-            case .success(let resource, let meta):
-                let user = resource
-                let pagination = meta.pagination
-                let headers = meta.headers
-                print("SUCCESS: \(user) : \(pagination) : \(headers)")
-            default:
-                break
-            }
-        }
-
-        apiClient.GET("/users", rootKey: "users") { (result: ApiResult<[User]>) in
-            switch result {
-            case .success(let resource, let meta):
-                let users = resource
-                let pagination = meta.pagination
-                let headers = meta.headers
-                print("SUCCESS: \(users) : \(pagination) : \(headers)")
-            default:
-                break
-            }
-        }
-
-        apiClient.GET("/user", params: ["thing" : "thing"]) { (result: ApiResult<User>) in
-            switch result {
-            case .success(let resource, let meta):
-                let user = resource
-                let pagination = meta.pagination
-                let headers = meta.headers
-                print("SUCCESS: \(user) : \(pagination) : \(headers)")
-            default:
-                break
-            }
-        }
-
-        apiClient.GET("/post", rootKey: "user") { (result: ApiResult<User>) in
-            switch result {
-            case .success(let resource, let meta):
-                let user = resource
-                let pagination = meta.pagination
-                let headers = meta.headers
-                print("SUCCESS: \(user) : \(pagination) : \(headers)")
-            default:
-                break
-            }
-        }
-
-        apiClient.GET("/user") { (result: ApiResult<User>) in
-            switch result {
-            case .success(let resource, let meta):
-                let user = resource
-                let pagination = meta.pagination
-                let headers = meta.headers
-                print("SUCCESS: \(user) : \(pagination) : \(headers)")
-            default:
-                break
-            }
-        }
-        
     }
 
 }

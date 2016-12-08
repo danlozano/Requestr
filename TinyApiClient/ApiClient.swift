@@ -251,7 +251,7 @@ private extension ApiClient {
                     resources = values.flatMap { try? T(json: $0) } // JSON.decode($0)
                 }
                 return (resource: resources, pagination: nil)
-            }else{
+            } else {
                 return (resource: nil, pagination: nil)
             }
         }, completion: completion)

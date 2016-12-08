@@ -10,13 +10,17 @@ import Foundation
 import TinyApiClient
 
 public protocol AuthService {
+
     func login(loginRequest: LoginRequest, completion: @escaping (AuthResult) -> Void)
-    func signup(signupRequest: String, completion: @escaping (AuthResult) -> Void)
+    func signup(signupRequest: SignupRequest, completion: @escaping (AuthResult) -> Void)
+
 }
 
 public enum AuthResult {
+
     case success(user: User, accessToken: String)
     case error(message: String)
+
 }
 
 public class AuthApiService: AuthService {
@@ -32,13 +36,17 @@ public class AuthApiService: AuthService {
 public extension AuthApiService {
 
     func login(loginRequest: LoginRequest, completion: @escaping (AuthResult) -> Void) {
-        apiClient.POST(Endpoints.login.fullPath, body: loginRequest) { (apiResult: ApiResult<User>) in
-            completion(self.authResultFor(apiResult: apiResult))
+        let endpoint = Endpoints.login
+        apiClient.POST(endpoint.fullPath, body: loginRequest) { (result: ApiResult<User>) in
+            completion(self.authResultFor(apiResult: result))
         }
     }
 
-    func signup(signupRequest: String, completion: @escaping (AuthResult) -> Void) {
-        
+    func signup(signupRequest: SignupRequest, completion: @escaping (AuthResult) -> Void) {
+        let endpoint = Endpoints.signup
+        apiClient.POST(endpoint.fullPath, rootKey: endpoint.rootKey, body: signupRequest) { (result: ApiResult<User>) in
+            completion(self.authResultFor(apiResult: result))
+        }
     }
 
 }

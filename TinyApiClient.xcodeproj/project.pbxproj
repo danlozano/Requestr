@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		063DFD0B1DD3DDCC00D6564E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063DFD0A1DD3DDCC00D6564E /* User.swift */; };
 		064A93D71DDBB5D000061772 /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064A93D61DDBB5D000061772 /* ApiClient.swift */; };
 		064A93D91DDBB60500061772 /* ApiResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064A93D81DDBB60500061772 /* ApiResult.swift */; };
-		064A93DB1DDBB68600061772 /* PaginationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064A93DA1DDBB68600061772 /* PaginationInfo.swift */; };
 		064A93DD1DDBB70A00061772 /* EmptyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064A93DC1DDBB70A00061772 /* EmptyResult.swift */; };
 		064A93DF1DDBB76E00061772 /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064A93DE1DDBB76E00061772 /* ActivityManager.swift */; };
 		06A1C80B1DD3D171005B9D34 /* TinyApiClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A1C8011DD3D171005B9D34 /* TinyApiClient.framework */; };
@@ -30,10 +28,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		063DFD0A1DD3DDCC00D6564E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		064A93D61DDBB5D000061772 /* ApiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
 		064A93D81DDBB60500061772 /* ApiResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiResult.swift; sourceTree = "<group>"; };
-		064A93DA1DDBB68600061772 /* PaginationInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaginationInfo.swift; sourceTree = "<group>"; };
 		064A93DC1DDBB70A00061772 /* EmptyResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyResult.swift; sourceTree = "<group>"; };
 		064A93DE1DDBB76E00061772 /* ActivityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
 		06A1C8011DD3D171005B9D34 /* TinyApiClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TinyApiClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,8 +85,6 @@
 				064A93D81DDBB60500061772 /* ApiResult.swift */,
 				06A1C81B1DD3D18C005B9D34 /* JSON.swift */,
 				064A93DC1DDBB70A00061772 /* EmptyResult.swift */,
-				064A93DA1DDBB68600061772 /* PaginationInfo.swift */,
-				063DFD0A1DD3DDCC00D6564E /* User.swift */,
 				064A93DE1DDBB76E00061772 /* ActivityManager.swift */,
 				06A1C8041DD3D171005B9D34 /* TinyApiClient.h */,
 				06A1C8051DD3D171005B9D34 /* Info.plist */,
@@ -220,11 +214,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				064A93DB1DDBB68600061772 /* PaginationInfo.swift in Sources */,
 				06A1C81C1DD3D18C005B9D34 /* JSON.swift in Sources */,
 				064A93DD1DDBB70A00061772 /* EmptyResult.swift in Sources */,
 				064A93DF1DDBB76E00061772 /* ActivityManager.swift in Sources */,
-				063DFD0B1DD3DDCC00D6564E /* User.swift in Sources */,
 				064A93D71DDBB5D000061772 /* ApiClient.swift in Sources */,
 				064A93D91DDBB60500061772 /* ApiResult.swift in Sources */,
 			);
