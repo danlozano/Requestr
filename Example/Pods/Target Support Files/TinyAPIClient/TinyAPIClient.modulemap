@@ -1,0 +1,6 @@
+framework module TinyAPIClient {
+  umbrella header "TinyAPIClient-umbrella.h"
+
+  export *
+  module * { export * }
+}

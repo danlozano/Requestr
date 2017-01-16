@@ -14,7 +14,6 @@
 		0651CA2A1DEDF494003C11BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0651CA281DEDF494003C11BA /* LaunchScreen.storyboard */; };
 		0651CA351DEDF494003C11BA /* TinyApiClientExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0651CA341DEDF494003C11BA /* TinyApiClientExampleTests.swift */; };
 		0651CA401DEDF494003C11BA /* TinyApiClientExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0651CA3F1DEDF494003C11BA /* TinyApiClientExampleUITests.swift */; };
-		0651CA4E1DEDF4FA003C11BA /* TinyApiClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0651CA4D1DEDF4FA003C11BA /* TinyApiClient.framework */; };
 		0651CA501DEDFB51003C11BA /* RemotelyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0651CA4F1DEDFB51003C11BA /* RemotelyService.swift */; };
 		066618E91DEF5141006D5E10 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066618E81DEF5141006D5E10 /* Endpoints.swift */; };
 		066618EC1DEF516E006D5E10 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066618EB1DEF516E006D5E10 /* User.swift */; };
@@ -22,6 +21,9 @@
 		066618F01DEF82F6006D5E10 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066618EF1DEF82F6006D5E10 /* AuthService.swift */; };
 		06C3391F1DF9DEBD00635734 /* SignupRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C3391E1DF9DEBD00635734 /* SignupRequest.swift */; };
 		06C339211DF9E2DD00635734 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C339201DF9E2DD00635734 /* Event.swift */; };
+		121F2DFE1C2F5423B9853ED6 /* Pods_TinyApiClientExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3265BBE3514515D63E338FF9 /* Pods_TinyApiClientExampleTests.framework */; };
+		97E99EA389A07C52D28D5716 /* Pods_TinyApiClientExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D32B4EB7C298AB49F3FE846F /* Pods_TinyApiClientExample.framework */; };
+		C1807AC7BA9DBF594920264D /* Pods_TinyApiClientExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ED21CFC2D9D0029489C9BC1 /* Pods_TinyApiClientExampleUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +57,6 @@
 		0651CA3B1DEDF494003C11BA /* TinyApiClientExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinyApiClientExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0651CA3F1DEDF494003C11BA /* TinyApiClientExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyApiClientExampleUITests.swift; sourceTree = "<group>"; };
 		0651CA411DEDF494003C11BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0651CA4D1DEDF4FA003C11BA /* TinyApiClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TinyApiClient.framework; path = "../../../Library/Developer/Xcode/DerivedData/TinyApiClient-bpsdvyxxenlxiycsrvxnqptdssfd/Build/Products/Debug-iphonesimulator/TinyApiClient.framework"; sourceTree = "<group>"; };
 		0651CA4F1DEDFB51003C11BA /* RemotelyService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotelyService.swift; sourceTree = "<group>"; };
 		066618E81DEF5141006D5E10 /* Endpoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
 		066618EB1DEF516E006D5E10 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -63,6 +64,15 @@
 		066618EF1DEF82F6006D5E10 /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		06C3391E1DF9DEBD00635734 /* SignupRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupRequest.swift; sourceTree = "<group>"; };
 		06C339201DF9E2DD00635734 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		1ED5375B4D78EA8197408168 /* Pods-TinyApiClientExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyApiClientExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinyApiClientExample/Pods-TinyApiClientExample.release.xcconfig"; sourceTree = "<group>"; };
+		26787E00A56BA7EF7FF5F1CA /* Pods-TinyApiClientExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyApiClientExampleUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinyApiClientExampleUITests/Pods-TinyApiClientExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		2AFA371089D5E61A6EEC2029 /* Pods-TinyApiClientExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyApiClientExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinyApiClientExampleTests/Pods-TinyApiClientExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		3265BBE3514515D63E338FF9 /* Pods_TinyApiClientExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyApiClientExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5ED21CFC2D9D0029489C9BC1 /* Pods_TinyApiClientExampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyApiClientExampleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2BDDC10E46CC7C5E9EFF3E0 /* Pods-TinyApiClientExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyApiClientExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinyApiClientExample/Pods-TinyApiClientExample.debug.xcconfig"; sourceTree = "<group>"; };
+		C9E4ADD33DA220738A611E50 /* Pods-TinyApiClientExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyApiClientExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinyApiClientExampleTests/Pods-TinyApiClientExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D32B4EB7C298AB49F3FE846F /* Pods_TinyApiClientExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyApiClientExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3C010001ED91261442ECA20 /* Pods-TinyApiClientExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyApiClientExampleUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinyApiClientExampleUITests/Pods-TinyApiClientExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0651CA4E1DEDF4FA003C11BA /* TinyApiClient.framework in Frameworks */,
+				97E99EA389A07C52D28D5716 /* Pods_TinyApiClientExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				121F2DFE1C2F5423B9853ED6 /* Pods_TinyApiClientExampleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1807AC7BA9DBF594920264D /* Pods_TinyApiClientExampleUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,11 +106,12 @@
 		0651CA131DEDF494003C11BA = {
 			isa = PBXGroup;
 			children = (
-				0651CA4D1DEDF4FA003C11BA /* TinyApiClient.framework */,
 				0651CA1E1DEDF494003C11BA /* TinyApiClientExample */,
 				0651CA331DEDF494003C11BA /* TinyApiClientExampleTests */,
 				0651CA3E1DEDF494003C11BA /* TinyApiClientExampleUITests */,
 				0651CA1D1DEDF494003C11BA /* Products */,
+				4E39BA338B1D8305DA9E8B4B /* Pods */,
+				9C29B03E294E74CFD8EB6228 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -158,6 +171,29 @@
 			name = Remotely;
 			sourceTree = "<group>";
 		};
+		4E39BA338B1D8305DA9E8B4B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C2BDDC10E46CC7C5E9EFF3E0 /* Pods-TinyApiClientExample.debug.xcconfig */,
+				1ED5375B4D78EA8197408168 /* Pods-TinyApiClientExample.release.xcconfig */,
+				C9E4ADD33DA220738A611E50 /* Pods-TinyApiClientExampleTests.debug.xcconfig */,
+				2AFA371089D5E61A6EEC2029 /* Pods-TinyApiClientExampleTests.release.xcconfig */,
+				26787E00A56BA7EF7FF5F1CA /* Pods-TinyApiClientExampleUITests.debug.xcconfig */,
+				D3C010001ED91261442ECA20 /* Pods-TinyApiClientExampleUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		9C29B03E294E74CFD8EB6228 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D32B4EB7C298AB49F3FE846F /* Pods_TinyApiClientExample.framework */,
+				3265BBE3514515D63E338FF9 /* Pods_TinyApiClientExampleTests.framework */,
+				5ED21CFC2D9D0029489C9BC1 /* Pods_TinyApiClientExampleUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -165,9 +201,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0651CA441DEDF494003C11BA /* Build configuration list for PBXNativeTarget "TinyApiClientExample" */;
 			buildPhases = (
+				CB501DAE4216811A2B22B343 /* [CP] Check Pods Manifest.lock */,
 				0651CA181DEDF494003C11BA /* Sources */,
 				0651CA191DEDF494003C11BA /* Frameworks */,
 				0651CA1A1DEDF494003C11BA /* Resources */,
+				8918B8C0E37CD297D4E0DEF9 /* [CP] Embed Pods Frameworks */,
+				37EB5877FAB9AB436BD52E6E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -182,9 +221,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0651CA471DEDF494003C11BA /* Build configuration list for PBXNativeTarget "TinyApiClientExampleTests" */;
 			buildPhases = (
+				779EBF25154A5FFA4D371EA0 /* [CP] Check Pods Manifest.lock */,
 				0651CA2C1DEDF494003C11BA /* Sources */,
 				0651CA2D1DEDF494003C11BA /* Frameworks */,
 				0651CA2E1DEDF494003C11BA /* Resources */,
+				676424E7B9E4DB8ABB844033 /* [CP] Embed Pods Frameworks */,
+				85783FC94777B6F87379BE25 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -200,9 +242,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0651CA4A1DEDF494003C11BA /* Build configuration list for PBXNativeTarget "TinyApiClientExampleUITests" */;
 			buildPhases = (
+				F93CEF3EEFF89D56A46984E2 /* [CP] Check Pods Manifest.lock */,
 				0651CA371DEDF494003C11BA /* Sources */,
 				0651CA381DEDF494003C11BA /* Frameworks */,
 				0651CA391DEDF494003C11BA /* Resources */,
+				AD8E9A41091C323C3736E395 /* [CP] Embed Pods Frameworks */,
+				6FDD7A3F473FACD49DEEC5FA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -286,6 +331,144 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		37EB5877FAB9AB436BD52E6E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyApiClientExample/Pods-TinyApiClientExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		676424E7B9E4DB8ABB844033 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyApiClientExampleTests/Pods-TinyApiClientExampleTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6FDD7A3F473FACD49DEEC5FA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyApiClientExampleUITests/Pods-TinyApiClientExampleUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		779EBF25154A5FFA4D371EA0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		85783FC94777B6F87379BE25 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyApiClientExampleTests/Pods-TinyApiClientExampleTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8918B8C0E37CD297D4E0DEF9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyApiClientExample/Pods-TinyApiClientExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AD8E9A41091C323C3736E395 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyApiClientExampleUITests/Pods-TinyApiClientExampleUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CB501DAE4216811A2B22B343 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F93CEF3EEFF89D56A46984E2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0651CA181DEDF494003C11BA /* Sources */ = {
@@ -448,7 +631,9 @@
 		};
 		0651CA451DEDF494003C11BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C2BDDC10E46CC7C5E9EFF3E0 /* Pods-TinyApiClientExample.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = TinyApiClientExample/Info.plist;
@@ -461,7 +646,9 @@
 		};
 		0651CA461DEDF494003C11BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1ED5375B4D78EA8197408168 /* Pods-TinyApiClientExample.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = TinyApiClientExample/Info.plist;
@@ -474,8 +661,9 @@
 		};
 		0651CA481DEDF494003C11BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9E4ADD33DA220738A611E50 /* Pods-TinyApiClientExampleTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = TinyApiClientExampleTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -488,8 +676,9 @@
 		};
 		0651CA491DEDF494003C11BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2AFA371089D5E61A6EEC2029 /* Pods-TinyApiClientExampleTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = TinyApiClientExampleTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -502,8 +691,9 @@
 		};
 		0651CA4B1DEDF494003C11BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26787E00A56BA7EF7FF5F1CA /* Pods-TinyApiClientExampleUITests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				INFOPLIST_FILE = TinyApiClientExampleUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.danielozano.TinyApiClientExampleUITests;
@@ -515,8 +705,9 @@
 		};
 		0651CA4C1DEDF494003C11BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D3C010001ED91261442ECA20 /* Pods-TinyApiClientExampleUITests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				INFOPLIST_FILE = TinyApiClientExampleUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.danielozano.TinyApiClientExampleUITests;

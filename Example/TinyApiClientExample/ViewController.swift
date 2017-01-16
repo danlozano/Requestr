@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import TinyApiClient
+import TinyAPIClient
 
 class ViewController: UIViewController {
 

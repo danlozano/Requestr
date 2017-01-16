@@ -1,22 +1,24 @@
 //
-//  LoginRequest.swift
+//  SignupRequest.swift
 //  TinyApiClientExample
 //
-//  Created by Daniel Lozano Valdés on 11/30/16.
+//  Created by Daniel Lozano Valdés on 12/8/16.
 //  Copyright © 2016 danielozano. All rights reserved.
 //
 
 import Foundation
-import TinyApiClient
+import TinyAPIClient
 
-public struct LoginRequest: JSONSerializable {
+public struct SignupRequest: JSONSerializable {
 
+    let name: String
     let email: String
     let password: String
 
     public var json: JSONDictionary {
-        return ["email" : email,
+        return ["name" : name,
+                "email" : email,
                 "password" : password]
     }
-    
+
 }

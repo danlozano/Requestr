@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import TinyApiClient
+import TinyAPIClient
 
 public protocol AuthService {
 

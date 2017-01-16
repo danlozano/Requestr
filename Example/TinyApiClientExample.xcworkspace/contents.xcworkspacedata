@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:TinyApiClient.xcodeproj">
+      location = "group:TinyApiClientExample.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:TinyApiClientExample/TinyApiClientExample.xcodeproj">
+      location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

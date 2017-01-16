@@ -1,0 +1,16 @@
+PODS:
+  - TinyAPIClient (0.1.0)
+
+DEPENDENCIES:
+  - TinyAPIClient (from `../`)
+
+EXTERNAL SOURCES:
+  TinyAPIClient:
+    :path: ../
+
+SPEC CHECKSUMS:
+  TinyAPIClient: 41d90dcbfd0cbcbb22884782b62b98e008fc2a82
+
+PODFILE CHECKSUM: 06604cfd84c69e118c6a94dbac3933d3c94c4442
+
+COCOAPODS: 1.1.1
