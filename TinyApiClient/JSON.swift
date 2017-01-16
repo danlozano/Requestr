@@ -72,11 +72,14 @@ extension Dictionary where Key: CustomStringConvertible, Value: Any {
 
         if #available(iOSApplicationExtension 10.0, OSXApplicationExtension 10.12, watchOSApplicationExtension 3.0, tvOSApplicationExtension 10.0, *) {
             if let string = value as? String {
-                guard let date = ISO8601DateFormatter().date(from: string) else {
-                    throw JSONDeserializationError.invalidAttribute(key: key.description)
+                if #available(iOS 10.0, *) {
+                    guard let date = ISO8601DateFormatter().date(from: string) else {
+                        throw JSONDeserializationError.invalidAttribute(key: key.description)
+                    }
+                    return date
+                } else {
+                    // Fallback on earlier versions
                 }
-
-                return date
             }
         }
 

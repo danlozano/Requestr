@@ -13,7 +13,7 @@
   },
   "social_media_url": "http://twitter.com/danlozanov",
   "platforms": {
-    "ios": "10.0"
+    "ios": "9.0"
   },
   "source": {
     "git": "https://github.com/danlozano/TinyAPIClient.git",

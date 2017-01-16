@@ -569,7 +569,7 @@
 			};
 			name = Debug;
 		};
-		ADF511BCB2AFCD5AAB833E3B801D1A3A /* Release */ = {
+		8B19F43A71509DB9B378DE3362CF75C7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 263F8AC4CABE548A1191767402BAB182 /* TinyAPIClient.xcconfig */;
 			buildSettings = {
@@ -587,7 +587,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/TinyAPIClient/TinyAPIClient-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/TinyAPIClient/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/TinyAPIClient/TinyAPIClient.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -600,39 +600,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
-		};
-		B133E03D8BEF08B067444FA24631B3B5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 263F8AC4CABE548A1191767402BAB182 /* TinyAPIClient.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/TinyAPIClient/TinyAPIClient-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/TinyAPIClient/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/TinyAPIClient/TinyAPIClient.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = TinyAPIClient;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
 		};
 		B23FB8FE2D06F8146792CA0842F6276E /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -788,6 +755,39 @@
 			};
 			name = Release;
 		};
+		F320DCAB70B4A731C6AAD403BC3CBA9B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 263F8AC4CABE548A1191767402BAB182 /* TinyAPIClient.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/TinyAPIClient/TinyAPIClient-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/TinyAPIClient/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/TinyAPIClient/TinyAPIClient.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = TinyAPIClient;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 		FAD643D4BD3492D784C438847D8C4D14 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4A178E4C798D65DD9BBBA424FE2313C1 /* Pods-TinyApiClientExampleTests.release.xcconfig */;
@@ -847,8 +847,8 @@
 		7968A49718FF26C77E0457872E11FF26 /* Build configuration list for PBXNativeTarget "TinyAPIClient" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B133E03D8BEF08B067444FA24631B3B5 /* Debug */,
-				ADF511BCB2AFCD5AAB833E3B801D1A3A /* Release */,
+				F320DCAB70B4A731C6AAD403BC3CBA9B /* Debug */,
+				8B19F43A71509DB9B378DE3362CF75C7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
