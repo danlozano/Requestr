@@ -340,21 +340,28 @@ private extension ApiClient {
     }
 
     func handleAPIError<T>(response: HTTPURLResponse, json: Any, completion: (ApiResult<T>) -> Void) {
+        let errorMetadata: ErrorMetadata
         let jsonDict = json as? JSONDictionary
-        let errorMessages = jsonDict?["errors"] as? [String]
-        let metadata = ErrorMetadata(statusCode: response.statusCode, errorMessages: errorMessages)
+
+        if let errorMessage = jsonDict?["error"] as? String {
+            errorMetadata = ErrorMetadata(statusCode: response.statusCode, errorMessages: [errorMessage])
+        } else if let errorMessages = jsonDict?["errors"] as? [String] {
+            errorMetadata = ErrorMetadata(statusCode: response.statusCode, errorMessages: errorMessages)
+        } else {
+            errorMetadata = ErrorMetadata(statusCode: response.statusCode, errorMessages: nil)
+        }
 
         switch response.statusCode {
         case 402:
-            completion(.error(.invalidCredentials(metadata)))
+            completion(.error(.invalidCredentials(errorMetadata)))
         case 403:
-            completion(.error(.invalidToken(metadata)))
+            completion(.error(.invalidToken(errorMetadata)))
         case 404:
-            completion(.error(.notFound(metadata)))
+            completion(.error(.notFound(errorMetadata)))
         case 400...499:
-            completion(.error(.clientError(metadata)))
+            completion(.error(.clientError(errorMetadata)))
         case 500...599:
-            completion(.error(.serverError(metadata)))
+            completion(.error(.serverError(errorMetadata)))
         default:
             print("Received HTTP \(response.statusCode), which was not handled")
         }
