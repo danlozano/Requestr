@@ -9,14 +9,17 @@
 import Foundation
 
 enum HTTPMethod: String {
+
     case GET
     case POST
     case PUT
     case PATCH
     case DELETE
+
 }
 
 public typealias URLParameters = [String : String]
+public typealias HTTPHeader = [AnyHashable : Any]
 
 public class ApiClient {
 
@@ -26,9 +29,13 @@ public class ApiClient {
 
     lazy var configuration: URLSessionConfiguration = {
         let config = URLSessionConfiguration.default
-        config.httpAdditionalHeaders = ["Content-Type" : "application/json; charset=utf-8"]
+        config.httpAdditionalHeaders = self.defaultHeaders
         return config
     }()
+
+    private var defaultHeaders: HTTPHeader {
+        return ["Content-Type" : "application/json; charset=utf-8"]
+    }
     
     public var loggingEnabled = false
 
@@ -40,10 +47,35 @@ public class ApiClient {
         }
     }
 
-    public func setAccessToken(token: String) {
+    public func setAuthorization(header: String?) {
+        if let header = header {
+            addToHeader(value: header, key: "Authorization")
+        } else {
+            addToHeader(value: nil, key: "Authorization")
+        }
+    }
+
+    public func setAccessToken(token: String?) {
+        if let token = token {
+            addToHeader(value: "Bearer \(token)", key: "Authorization")
+        } else {
+            addToHeader(value: nil, key: "Authorization")
+        }
+    }
+
+    public func addToHeader(value: Any?, key: AnyHashable) {
+        var headers: [AnyHashable : Any]
+
+        if let currentHeaders = self.configuration.httpAdditionalHeaders {
+            headers = currentHeaders
+        } else {
+            headers = defaultHeaders
+        }
+
+        headers[key] = value
+
         let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders = ["Authorization" : "Bearer \(token)",
-                                              "Content-Type" : "application/json; charset=utf-8"]
+        configuration.httpAdditionalHeaders = headers
         urlSession = URLSession(configuration: configuration)
     }
 
@@ -273,12 +305,12 @@ private extension ApiClient {
                 ActivityManager.decreaseActivityCount()
 
                 if let error = error {
-                    self.handleError(error: error, completion: completion)
+                    self.handleLocalError(error: error, completion: completion)
                 } else {
                     if let response = response, let json = json {
                         self.handleResponse(response: response, json: json, parseBlock: parseBlock, completion: completion)
                     } else {
-                        completion(.unknownError)
+                        completion(.error(.unknownError))
                     }
                 }
 
@@ -287,20 +319,10 @@ private extension ApiClient {
         task.resume()
     }
 
-    func handleError<T>(error: Error, completion: (ApiResult<T>) -> Void) {
-        if (error as NSError).code == -999 {
-            completion(.cancelled)
-        } else {
-            completion(.error(error))
-        }
-    }
+    func handleResponse<T>(response: HTTPURLResponse, json: Any, parseBlock: (Any) -> (resource: T?, pagination: PaginationInfo?), completion: (ApiResult<T>) -> Void) {
 
-    func handleResponse<T>(response: HTTPURLResponse,
-                        json: Any,
-                        parseBlock: (Any) -> (resource: T?, pagination: PaginationInfo?),
-                        completion: (ApiResult<T>) -> Void) {
         switch response.statusCode {
-        case 200:
+        case 200..<300:
             let parseResult = parseBlock(json)
             if let resource = parseResult.resource {
                 let headers = response.allHeaderFields as? Dictionary<String, Any>
@@ -309,20 +331,40 @@ private extension ApiClient {
             } else {
                 print("API CLIENT: WARNING: Couldn't parse the following JSON as a \(T.self)")
                 print(json)
-                completion(.unexpectedResponse(json))
+                completion(.error(.unexpectedResponse(json)))
             }
+        default:
+            handleAPIError(response: response, json: json, completion: completion)
+        }
+
+    }
+
+    func handleAPIError<T>(response: HTTPURLResponse, json: Any, completion: (ApiResult<T>) -> Void) {
+        let jsonDict = json as? JSONDictionary
+        let errorMessages = jsonDict?["errors"] as? [String]
+        let metadata = ErrorMetadata(statusCode: response.statusCode, errorMessages: errorMessages)
+
+        switch response.statusCode {
         case 402:
-            completion(.invalidCredentials)
+            completion(.error(.invalidCredentials(metadata)))
         case 403:
-            completion(.invalidToken)
+            completion(.error(.invalidToken(metadata)))
         case 404:
-            completion(.notFound)
+            completion(.error(.notFound(metadata)))
         case 400...499:
-            completion(.clientError(response.statusCode))
+            completion(.error(.clientError(metadata)))
         case 500...599:
-            completion(.serverError(response.statusCode))
+            completion(.error(.serverError(metadata)))
         default:
             print("Received HTTP \(response.statusCode), which was not handled")
+        }
+    }
+
+    func handleLocalError<T>(error: Error, completion: (ApiResult<T>) -> Void) {
+        if (error as NSError).code == -999 {
+            completion(.error(.cancelled))
+        } else {
+            completion(.error(.localError(error)))
         }
     }
 
