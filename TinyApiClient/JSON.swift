@@ -9,15 +9,20 @@
 // Inspired from Sam Soffes simple JSON micro-framework https://github.com/soffes/JSON
 
 import Foundation
+import CoreLocation
 
 public typealias JSONDictionary = [String : Any]
 
 public protocol JSONDeserializable {
+
     init(json: JSONDictionary) throws
+
 }
 
 public protocol JSONSerializable {
+
     var json: JSONDictionary { get }
+
 }
 
 public protocol JSONValue { }
@@ -26,12 +31,19 @@ extension Dictionary: JSONValue { }
 extension String: JSONValue { }
 extension Bool: JSONValue { }
 extension Int: JSONValue { }
+extension Double: JSONValue { }
 
 public enum JSONDeserializationError: Error {
+
     case missingAttribute(key: String)
+
     case invalidAttributeType(key: String, expectedType: Any.Type, receivedValue: Any)
+
     case invalidAttribute(key: String)
+
 }
+
+// MARK: - Main decode methods
 
 extension Dictionary where Key: CustomStringConvertible, Value: Any {
 
@@ -52,7 +64,7 @@ extension Dictionary where Key: CustomStringConvertible, Value: Any {
         return try decode(value)
     }
 
-    public func decode<T: JSONDeserializable>(_ key: Key) throws -> [T] {
+    public func decodeArray<T: JSONDeserializable>(_ key: Key) throws -> [T] {
         let values: [JSONDictionary] = try decode(key)
         return values.flatMap { try? decode($0) }
     }
@@ -63,7 +75,41 @@ extension Dictionary where Key: CustomStringConvertible, Value: Any {
 
 }
 
+// MARK: - Helper decode methods
+
 extension Dictionary where Key: CustomStringConvertible, Value: Any {
+
+    // MARK: Coordinate
+
+    public func decode(latitudeKey: Key, longitudeKey: Key) throws -> CLLocationCoordinate2D {
+        guard let latitudeValue = self[latitudeKey] else {
+            throw JSONDeserializationError.missingAttribute(key: latitudeKey.description)
+        }
+
+        guard let longitudeValue = self[longitudeKey] else {
+            throw JSONDeserializationError.missingAttribute(key: longitudeKey.description)
+        }
+
+        guard let latitude = latitudeValue as? String else {
+            throw JSONDeserializationError.invalidAttributeType(key: latitudeKey.description, expectedType: String.self, receivedValue: latitudeValue)
+        }
+
+        guard let longitude = longitudeValue as? String else {
+            throw JSONDeserializationError.invalidAttributeType(key: longitudeKey.description, expectedType: String.self, receivedValue: longitudeValue)
+        }
+
+        guard let lat = Double(latitude.trimmingCharacters(in: .whitespaces)) else {
+            throw JSONDeserializationError.invalidAttributeType(key: latitudeKey.description, expectedType: Double.self, receivedValue: latitude)
+        }
+
+        guard let lng = Double(longitude.trimmingCharacters(in: .whitespaces)) else {
+            throw JSONDeserializationError.invalidAttributeType(key: longitudeKey.description, expectedType: Double.self, receivedValue: longitude)
+        }
+
+        return CLLocationCoordinate2D(latitude: lat, longitude: lng)
+    }
+
+    // MARK: Date
 
     public func decode(_ key: Key) throws -> Date {
         guard let value = self[key] else {
@@ -78,7 +124,10 @@ extension Dictionary where Key: CustomStringConvertible, Value: Any {
                     }
                     return date
                 } else {
-                    // Fallback on earlier versions
+                    guard let date = DateHelper.ISO8601DateFormatter.date(from: string) else {
+                        throw JSONDeserializationError.invalidAttribute(key: key.description)
+                    }
+                    return date
                 }
             }
         }
@@ -93,41 +142,17 @@ extension Dictionary where Key: CustomStringConvertible, Value: Any {
 
         throw JSONDeserializationError.invalidAttributeType(key: key.description, expectedType: String.self, receivedValue: value)
     }
-    
+
 }
 
-//public enum JSON {
-//
-//    public enum DeserializationError: Error {
-//        case missingAttribute(key: String)
-//        case invalidAttributeType(key: String, expectedType: Any.Type, receivedValue: Any)
-//        case invalidAttribute(key: String)
-//    }
-//
-//    static func decode<T: JSONValue>(_ dictionary: JSONDictionary, key: String) throws -> T {
-//        guard let value = dictionary[key] else {
-//            throw JSON.DeserializationError.missingAttribute(key: key)
-//        }
-//
-//        guard let attribute = value as? T else {
-//            throw JSON.DeserializationError.invalidAttributeType(key: key, expectedType: T.self, receivedValue: value)
-//        }
-//
-//        return attribute
-//    }
-//
-//    static func decode<T: JSONDeserializable>(_ dictionary: JSONDictionary, key: String) throws -> T {
-//        let value: JSONDictionary = try decode(dictionary, key: key)
-//        return try decode(value)
-//    }
-//
-//    static func decode<T: JSONDeserializable>(_ dictionary: JSONDictionary, key: String) throws -> [T] {
-//        let values: [JSONDictionary] = try decode(dictionary, key: key)
-//        return values.flatMap { try? decode($0) }
-//    }
-//
-//    static func decode<T: JSONDeserializable>(_ dictionary: JSONDictionary) throws -> T {
-//        return try T.init(json: dictionary)
-//    }
-//
-//}
+enum DateHelper {
+
+    static let ISO8601DateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.locale = enUSPosixLocale
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        return dateFormatter
+    }()
+    
+}

@@ -14,6 +14,8 @@ public struct Metadata {
 
     public let headers: JSONDictionary?
 
+    public let other: JSONDictionary?
+
 }
 
 public struct PaginationInfo {
