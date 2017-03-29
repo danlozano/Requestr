@@ -141,6 +141,17 @@ public extension ApiClient {
 
     // MARK: PUT
 
+    // PUT with empty response
+    func PUT(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<EmptyResult>) -> Void) {
+        performRequest(address: address,
+                       httpMethod: .PUT,
+                       rootKey: rootKey,
+                       params: params,
+                       body: body,
+                       completion: completion)
+    }
+
+    // PUT with resource as response
     func PUT<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) {
         performRequest(address: address,
                        httpMethod: .PUT,

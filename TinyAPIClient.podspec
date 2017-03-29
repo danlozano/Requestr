@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "TinyAPIClient"
-  s.version      = "0.1.0"
+  s.version      = "0.1.1"
   s.summary      = "Tiny (small, simple) API client for Swift."
   s.description  = <<-DESC
   Simple network library based on NSURLSession. Handles JSON mapping, among other things.
