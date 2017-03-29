@@ -345,11 +345,11 @@ private extension ApiClient {
             self.currentTasks.remove(task)
             let http = response as? HTTPURLResponse
             if let error = error {
-                self.debugLog(msg: "Received an error from HTTP \(request.httpMethod ?? "") to \(request.url?.absoluteString)")
+                self.debugLog(msg: "Received an error from HTTP \(request.httpMethod ?? "") to \(request.url?.absoluteString ?? "URL")")
                 self.debugLog(msg: "Error: \(error)")
                 completion(nil, http, error)
             } else {
-                self.debugLog(msg: "Received HTTP \(http?.statusCode) from \(request.httpMethod ?? "") to \(request.url?.absoluteString)")
+                self.debugLog(msg: "Received HTTP \(http?.statusCode ?? 0) from \(request.httpMethod ?? "") to \(request.url?.absoluteString ?? "URL")")
                 if let data = data {
                     do {
                         self.debugResponseData(data: data)
