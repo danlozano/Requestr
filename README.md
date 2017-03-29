@@ -1,2 +1,2 @@
-# TinyAPIClient
-Tiny (small, simple) API client for Swift.
+# Requestr
+Simple swift NSURLSession wrapper
