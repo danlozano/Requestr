@@ -79,6 +79,24 @@ extension Dictionary where Key: CustomStringConvertible, Value: Any {
 
 extension Dictionary where Key: CustomStringConvertible, Value: Any {
 
+    // MARK: Enum (String RawValue)
+
+    public func decode<T: RawRepresentable>(_ key: Key) throws -> T where T.RawValue == String {
+        guard let value = self[key] else {
+            throw JSONDeserializationError.missingAttribute(key: key.description)
+        }
+
+        guard let attribute = value as? String else {
+            throw JSONDeserializationError.invalidAttributeType(key: key.description, expectedType: T.self, receivedValue: value)
+        }
+
+        guard let result = T(rawValue: attribute) else {
+            throw JSONDeserializationError.invalidAttribute(key: key.description)
+        }
+
+        return result
+    }
+
     // MARK: Coordinate
 
     public func decode(latitudeKey: Key, longitudeKey: Key) throws -> CLLocationCoordinate2D {
