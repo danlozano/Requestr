@@ -108,7 +108,7 @@ public extension ApiClient {
     }
 
     // GET Array
-    func GET<T: JSONDeserializable>(_ address: String, rootKey: String, params: URLParameters? = nil, completion: @escaping (ApiResult<[T]>) -> Void) {
+    func GET<T: JSONDeserializable>(_ address: String, rootKey: String? = nil, params: URLParameters? = nil, completion: @escaping (ApiResult<[T]>) -> Void) {
         performRequest(address: address,
                        httpMethod: .GET,
                        rootKey: rootKey,
@@ -203,11 +203,16 @@ private extension ApiClient {
         fetchResource(request: request, rootKey: rootKey, completion: completion)
     }
 
-    func performRequest<T: JSONDeserializable>(address: String, httpMethod: HTTPMethod, rootKey: String, params: URLParameters?, body: JSONSerializable?, completion: @escaping (ApiResult<[T]>) -> Void) {
+    func performRequest<T: JSONDeserializable>(address: String, httpMethod: HTTPMethod, rootKey: String?, params: URLParameters?, body: JSONSerializable?, completion: @escaping (ApiResult<[T]>) -> Void) {
         guard let request = makeRequest(address: address, params: params, httpMethod: httpMethod, body: body) else {
             return
         }
-        fetchCollection(request: request, rootKey: rootKey, completion: completion)
+
+        if let rootKey = rootKey {
+            fetchCollection(request: request, rootKey: rootKey, completion: completion)
+        } else {
+            fetchCollection(request: request, completion: completion)
+        }
     }
 
     func makeRequest(address: String, params: URLParameters?, httpMethod: HTTPMethod, body: JSONSerializable?) -> URLRequest? {
@@ -296,6 +301,28 @@ private extension ApiClient {
             return (resource: resource, pagination: nil, other: nil)
         }, completion: completion)
 
+    }
+
+    func fetchCollection<T: JSONDeserializable>(request: URLRequest, completion: @escaping (ApiResult<[T]>) -> Void) {
+        fetch(request: request, parseBlock: { (json) -> (resource: [T]?, pagination: PaginationInfo?, other: JSONDictionary?) in
+            if let rootJSON = json as? [JSONDictionary] {
+                var resources: [T]?
+
+                if self.developmentModeEnabled {
+                    do {
+                        resources = try rootJSON.flatMap { try T(json: $0) }
+                    } catch {
+                        fatalError("API CLIENT, DEVELOPMENT MODE: ERROR = \(error)")
+                    }
+                } else {
+                    resources = rootJSON.flatMap { try? T(json: $0) }
+                }
+
+                return (resource: resources, pagination: nil, other: nil)
+            } else {
+                return (resource: nil, pagination: nil, other: nil)
+            }
+        }, completion: completion)
     }
 
     func fetchCollection<T: JSONDeserializable>(request: URLRequest, rootKey: String, completion: @escaping (ApiResult<[T]>) -> Void) {
