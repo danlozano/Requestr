@@ -36,9 +36,7 @@ extension Double: JSONValue { }
 public enum JSONDeserializationError: Error, CustomStringConvertible {
 
     case missingAttribute(key: String, ofType: Any.Type, onDictionary: Dictionary<String,Any>)
-
     case invalidAttributeType(key: String, expectedType: Any.Type, receivedValue: Any)
-
     case invalidAttribute(key: String)
 
 	public var description: String {

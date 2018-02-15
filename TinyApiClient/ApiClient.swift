@@ -53,9 +53,7 @@ public class ApiClient {
 	}
 
     public func cancelAllRequests() {
-        for task in currentTasks {
-            task.cancel()
-        }
+		currentTasks.forEach { $0.cancel() }
         currentTasks = []
     }
 
@@ -123,20 +121,22 @@ public extension ApiClient {
 		return emptyFetch(request: urlRequest, errorParser: nil, completion: completion)
 	}
 
-	func loadRequest<T: JSONDeserializable>(_ request: Request, rootKey: String? = nil, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask? {
+	func loadRequest<T: JSONDeserializable>(_ request: Request, rootKey: String? = nil, errorParser: ((Any) -> [String]?)? = nil, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask? {
 		guard let urlRequest = request.urlRequest else {
 			return nil
 		}
 
-		return fetchResource(request: urlRequest, rootKey: rootKey, initialization: { (jsonAny) throws -> T in
+		let initializationBlock: (Any) throws -> T = { (jsonAny) in
 			guard let jsonDict = jsonAny as? JSONDictionary else {
 				throw ApiClient.Error.failedCastToJSONDictionary(jsonAny)
 			}
 			return try T.init(json: jsonDict)
-		}, errorParser: nil, completion: completion)
+		}
+
+		return fetchResource(request: urlRequest, rootKey: rootKey, initialization: initializationBlock, errorParser: errorParser, completion: completion)
 	}
 
-	func loadRequest<T: JSONDeserializable>(_ request: Request, rootKey: String? = nil, completion: @escaping (ApiResult<[T]>) -> Void) -> URLSessionDataTask? {
+	func loadRequest<T: JSONDeserializable>(_ request: Request, rootKey: String? = nil, errorParser: ((Any) -> [String]?)? = nil, completion: @escaping (ApiResult<[T]>) -> Void) -> URLSessionDataTask? {
 		guard let urlRequest = request.urlRequest else {
 			return nil
 		}
@@ -152,7 +152,7 @@ public extension ApiClient {
 			}
 		}
 
-		return fetchResource(request: urlRequest, rootKey: rootKey, initialization: initializationBlock, errorParser: nil, completion: completion)
+		return fetchResource(request: urlRequest, rootKey: rootKey, initialization: initializationBlock, errorParser: errorParser, completion: completion)
 	}
 
     // MARK: GET
@@ -250,16 +250,15 @@ typealias ErrorParser = (Any) -> [String]?
 private extension ApiClient {
 
 	func emptyFetch(request: URLRequest, errorParser: ErrorParser?, completion: @escaping (ApiResult<EmptyResult>) -> Void) -> URLSessionDataTask {
-        return fetch(request: request, parseBlock: { (json) -> (resource: EmptyResult?, pagination: Metadata.PaginationInfo?, other: JSONDictionary?) in
-            return (resource: EmptyResult(), pagination: nil, other: nil)
+        return fetch(request: request, parseBlock: { (json) -> (resource: EmptyResult?, other: JSONDictionary?) in
+            return (resource: EmptyResult(), other: nil)
 		}, errorParser: errorParser, completion: completion)
     }
 
 	func fetchResource<T>(request: URLRequest, rootKey: String?, initialization: @escaping (Any) throws -> T, errorParser: ErrorParser?, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask {
-		return fetch(request: request, parseBlock: { (jsonAny) -> (resource: T?, pagination: Metadata.PaginationInfo?, other: JSONDictionary?) in
+		return fetch(request: request, parseBlock: { (jsonAny) -> (resource: T?, other: JSONDictionary?) in
 			var resource: T?
 			var other: JSONDictionary?
-			var pagination: Metadata.PaginationInfo?
 
 			if self.developmentModeEnabled {
 				do {
@@ -279,10 +278,9 @@ private extension ApiClient {
 						other = tempOther
 					}
 				}
-				// TODO: Pagination. Or leave up to client? Maybe parser in Resource?
 			}
 
-			return (resource: resource, pagination: pagination, other: other)
+			return (resource: resource, other: other)
 		}, errorParser: errorParser, completion: completion)
 	}
 
@@ -304,129 +302,18 @@ private extension ApiClient {
 		return try initialization(finalJsonAny)
 	}
 
-//	func fetchResource<T>(request: URLRequest, rootKey: String?, initialization: @escaping (Any) throws -> T, errorParser: ErrorParser?, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask {
-//        return fetch(request: request, parseBlock: { (json) -> (resource: T?, pagination: Metadata.PaginationInfo?, other: JSONDictionary?) in
-//            var resource: T?
-//            var finalJSON: JSONDictionary?
-//
-//            if let rootJSON = json as? JSONDictionary {
-//                if let rootKey = rootKey, let extractedJSON = rootJSON[rootKey] as? JSONDictionary {
-//                    finalJSON = extractedJSON
-//                } else {
-//                    finalJSON = rootJSON
-//                }
-//            }
-//
-//            if self.developmentModeEnabled {
-//                do {
-//                    if let finalJSON = finalJSON {
-//						resource = try initialization(finalJSON)
-//                        // resource = try T(json: finalJSON)
-//                    }
-//                } catch {
-//                    fatalError("\(error)")
-//                }
-//            } else {
-//                if let finalJSON = finalJSON {
-//					resource = try? initialization(finalJSON)
-//                    // resource = try? T(json: finalJSON)
-//                }
-//            }
-//
-//            return (resource: resource, pagination: nil, other: nil)
-//		}, errorParser: errorParser, completion: completion)
-//    }
-
-//	func fetchCollection<T>(request: URLRequest, initialization: @escaping (Any) throws -> [T], errorParser: ErrorParser?, completion: @escaping (ApiResult<[T]>) -> Void) -> URLSessionDataTask {
-//		return fetch(request: request, parseBlock: { (json) -> (resource: [T]?, pagination: Metadata.PaginationInfo?, other: JSONDictionary?) in
-//			if let rootJSON = json as? [JSONDictionary] {
-//				var resources: [T]?
-//
-//				do {
-//					resources = try initialization(rootJSON)
-//				} catch {
-//					fatalError("\(error)")
-//				}
-//
-////				if self.developmentModeEnabled {
-////					do {
-////						resources = try initialization(rootJSON)
-////						// resources = try rootJSON.map(initialization)
-////						// resources = try rootJSON.flatMap { try T(json: $0) }
-////					} catch {
-////						fatalError("\(error)")
-////					}
-////				} else {
-////					resources = try? initialization(rootJSON) // TODO:?
-////					// resources = rootJSON.flatMap { try? initialization($0) }
-////					// resources = rootJSON.flatMap { try? T(json: $0) }
-////				}
-//
-//				return (resource: resources, pagination: nil, other: nil)
-//			} else {
-//				return (resource: nil, pagination: nil, other: nil)
-//			}
-//		}, errorParser: errorParser, completion: completion)
-//	}
-
-//	func fetchCollection<T>(request: URLRequest, rootKey: String, initialization: @escaping (Any) throws -> [T], errorParser: ErrorParser?, completion: @escaping (ApiResult<[T]>) -> Void) -> URLSessionDataTask {
-//        return fetch(request: request, parseBlock: { (json) -> (resource: [T]?, pagination: Metadata.PaginationInfo?, other: JSONDictionary?) in
-//            if var rootJSON = json as? JSONDictionary {
-//                var resources: [T]?
-//
-//				do {
-//					let values: [JSONDictionary] = try rootJSON.decode(rootKey)
-//					resources = try initialization(values)
-//				} catch {
-//					fatalError("\(error)")
-//				}
-//
-////                if self.developmentModeEnabled {
-////                    do {
-////                        let values: [JSONDictionary] = try rootJSON.decode(rootKey)
-////						resources = try initialization(values)
-////						// resources = try values.map(initialization)
-////                        // resources = try values.flatMap { try T(json: $0) }
-////                    } catch {
-////                        fatalError("\(error)")
-////                    }
-////                } else {
-////                    if let values: [JSONDictionary] = try? rootJSON.decode(rootKey) {
-////						resources = try? initialization(values)
-////						// resources = values.flatMap { try? initialization($0) }
-////                        // resources = values.flatMap { try? T(json: $0) }
-////                    }
-////                }
-//
-//                var other: JSONDictionary? = nil
-//                rootJSON[rootKey] = nil
-//                if rootJSON.keys.count > 0 {
-//                    other = rootJSON
-//                }
-//
-//                return (resource: resources, pagination: nil, other: other)
-//            } else {
-//                return (resource: nil, pagination: nil, other: nil)
-//            }
-//		}, errorParser: errorParser, completion: completion)
-//    }
-
 }
 
 // MARK: - Fetching
 
-// typealias ParseBlock<T> = (Any) -> (resource: T?, pagination: Metadata.PaginationInfo?, other: JSONDictionary?)
-typealias JsonTaskCompletionHandler = (Any?, HTTPURLResponse?, Error?) -> Void
-
 private extension ApiClient {
 
-    func fetch<T>(request: URLRequest, parseBlock: @escaping (Any) -> (resource: T?, pagination: Metadata.PaginationInfo?, other: JSONDictionary?), errorParser: ErrorParser?, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask {
+    func fetch<T>(request: URLRequest, parseBlock: @escaping (Any) -> (resource: T?, other: JSONDictionary?), errorParser: ErrorParser?, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask {
         ActivityManager.incrementActivityCount()
         
         let task = jsonTaskWithRequest(request: request as URLRequest) { (json, response, error) in
             DispatchQueue.main.async {
                 ActivityManager.decreaseActivityCount()
-
                 if let error = error {
                     self.handleLocalError(error: error, completion: completion)
                 } else {
@@ -436,7 +323,6 @@ private extension ApiClient {
                         completion(.error(.unknownError))
                     }
                 }
-
             }
         }
 
@@ -446,7 +332,7 @@ private extension ApiClient {
 
     // MARK: NSURLSession - Data Task Creation
 
-    func jsonTaskWithRequest(request: URLRequest, completion: @escaping JsonTaskCompletionHandler) -> URLSessionDataTask {
+    func jsonTaskWithRequest(request: URLRequest, completion: @escaping (Any?, HTTPURLResponse?, Swift.Error?) -> Void) -> URLSessionDataTask {
         var task: URLSessionDataTask!
         task = urlSession.dataTask(with: request, completionHandler: { (data, response, error) in
             self.currentTasks.remove(task)
@@ -482,13 +368,13 @@ private extension ApiClient {
 
 extension ApiClient {
 
-	func handleResponse<T>(response: HTTPURLResponse, json: Any, parseBlock: (Any) -> (resource: T?, pagination: Metadata.PaginationInfo?, other: JSONDictionary?), errorParser: ErrorParser?, completion: (ApiResult<T>) -> Void) {
+	func handleResponse<T>(response: HTTPURLResponse, json: Any, parseBlock: (Any) -> (resource: T?, other: JSONDictionary?), errorParser: ErrorParser?, completion: (ApiResult<T>) -> Void) {
 		switch response.statusCode {
 		case 200..<300:
 			let parseResult = parseBlock(json)
 			if let resource = parseResult.resource {
 				let headers = response.allHeaderFields as? Dictionary<String, Any>
-				let metadata = Metadata(statusCode: response.statusCode, pagination: parseResult.pagination, headers: headers, other: parseResult.other)
+				let metadata = Metadata(statusCode: response.statusCode, headers: headers, other: parseResult.other)
 				completion(.success(resource: resource, meta: metadata))
 			} else {
 				print("API CLIENT: WARNING: Couldn't parse the following JSON as a \(T.self)")

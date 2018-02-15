@@ -8,25 +8,18 @@
 
 import Foundation
 
-public struct Metadata {
-
-	public struct PaginationInfo {
-		public var perPage: Int
-		public var totalPages: Int
-		public var totalObjects: Int
-	}
-
-	public let statusCode: Int
-	public let pagination: PaginationInfo?
-	public let headers: JSONDictionary?
-	public let other: JSONDictionary?
-
-}
-
 public enum ApiResult<T> {
 
 	case success(resource: T, meta: Metadata)
 	case error(ApiError)
+
+}
+
+public struct Metadata {
+
+	public let statusCode: Int
+	public let headers: JSONDictionary?
+	public let other: JSONDictionary?
 
 }
 

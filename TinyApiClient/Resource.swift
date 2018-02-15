@@ -9,9 +9,8 @@ import Foundation
 
 public protocol Resource {
 
-	typealias ErrorDescriptor = String
-
 	associatedtype Model
+	typealias ErrorDescription = String
 
 	var request: Request { get }
 
@@ -19,14 +18,14 @@ public protocol Resource {
 
 	var parser: ((Any) throws -> Model)  { get }
 
-	var errorParser: ((Any) -> [ErrorDescriptor]?)? { get }
+	var errorParser: ((Any) -> [ErrorDescription]?)? { get }
 
 }
 
 public struct BasicResource<Model>: Resource {
 
 	public typealias ParseBlock = ((Any) throws -> Model)
-	public typealias ErrorParseBlock = ((Any) -> [Resource.ErrorDescriptor]?)
+	public typealias ErrorParseBlock = ((Any) -> [Resource.ErrorDescription]?)
 
 	public var request: Request
 
@@ -36,7 +35,7 @@ public struct BasicResource<Model>: Resource {
 
 	public var errorParser: ErrorParseBlock?
 
-	init(request: Request, rootKey: String?, parser: @escaping ParseBlock, errorParser: ErrorParseBlock? = nil) {
+	init(request: Request, rootKey: String? = nil, parser: @escaping ParseBlock, errorParser: ErrorParseBlock? = nil) {
 		self.request = request
 		self.rootKey = rootKey
 		self.parser = parser
