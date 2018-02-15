@@ -26,12 +26,12 @@ public enum Address {
 
 }
 
-struct BasicRequest: Request {
+public struct BasicRequest: Request {
 
-	let method: HTTPMethod
-	let address: Address
-	let parameters: URLParameters?
-	let body: JSONSerializable?
+	public let method: HTTPMethod
+	public let address: Address
+	public let parameters: URLParameters?
+	public let body: JSONSerializable?
 
 }
 
