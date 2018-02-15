@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum PlistError: Error {
+public enum PlistError: Error {
 
     case unknownError
     case parseError
@@ -19,9 +19,13 @@ enum PlistError: Error {
 
 typealias PropertyList = [String : Any]
 
-class PlistClient {
+public class PlistClient {
 
-    func getResources<T: JSONDeserializable>(file: String) -> [T]? {
+    public init() {
+        
+    }
+
+    public func getResources<T: JSONDeserializable>(file: String) -> [T]? {
         guard let url = try? urlForFileInDocuments(file: file, type: "plist") else {
             return nil
         }
@@ -33,10 +37,15 @@ class PlistClient {
         return plist.flatMap { try? T(json: $0) }
     }
 
-    func saveResources<T: JSONSerializable>(file: String, resources: [T]) throws {
+    public func saveResources<T: JSONSerializable>(file: String, resources: [T]) throws {
         let url = try urlForFileInDocuments(file: file, type: "plist")
         let plist: [PropertyList] = resources.map{ $0.json }
         try savePlist(plist: plist, toUrl: url)
+    }
+
+    public func deleteResources(file: String) throws {
+        let url = try urlForFileInDocuments(file: file, type: "plist")
+        try deleteFileAt(url: url)
     }
 
     // MARK: - Plist
@@ -73,6 +82,11 @@ class PlistClient {
 
     // MARK: - File Helper's
 
+    func deleteFileAt(url: URL) throws {
+        let fileManager = FileManager.default
+        try fileManager.removeItem(at: url)
+    }
+
     func urlForFileInDocuments(file: String, type: String) throws -> URL {
         let fileManager = FileManager.default
         let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
@@ -83,11 +97,11 @@ class PlistClient {
 
         let plist = documentsDir.appendingPathComponent("\(file).\(type)")
         return plist
-        //        if try plist.checkResourceIsReachable() {
-        //            return plist
-        //        } else {
-        //            throw PlistError.fileDoesNotExist
-        //        }
+//        if try plist.checkResourceIsReachable() {
+//            return plist
+//        } else {
+//            throw PlistError.fileDoesNotExist
+//        }
     }
 
     func urlForFileInBundle(file: String, type: String) throws -> URL {

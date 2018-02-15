@@ -10,62 +10,46 @@ import Foundation
 
 public struct Metadata {
 
-    public let pagination: PaginationInfo?
+	public struct PaginationInfo {
+		public var perPage: Int
+		public var totalPages: Int
+		public var totalObjects: Int
+	}
 
-    public let headers: JSONDictionary?
-
-    public let other: JSONDictionary?
-
-}
-
-public struct PaginationInfo {
-
-    public var perPage: Int
-
-    public var totalPages: Int
-
-    public var totalObjects: Int
-
-}
-
-public enum ApiError: Error {
-
-    // MARK: - API Errors
-
-    case clientError(ErrorMetadata)
-
-    case serverError(ErrorMetadata)
-
-    case notFound(ErrorMetadata)
-
-    case invalidToken(ErrorMetadata)
-
-    case invalidCredentials(ErrorMetadata)
-
-    // MARK: - Local, Unknown errors
-
-    case localError(Error)
-
-    case cancelled
-
-    case unexpectedResponse(Any)
-
-    case unknownError
-
-}
-
-public struct ErrorMetadata {
-
-    public let statusCode: Int
-
-    public let errorMessages: [String]?
+	public let statusCode: Int
+	public let pagination: PaginationInfo?
+	public let headers: JSONDictionary?
+	public let other: JSONDictionary?
 
 }
 
 public enum ApiResult<T> {
 
-    case success(resource: T, meta: Metadata)
-    
-    case error(ApiError)
-    
+	case success(resource: T, meta: Metadata)
+	case error(ApiError)
+
+}
+
+public enum ApiError: Error {
+
+	public struct Metadata {
+		public let statusCode: Int
+		public let errorMessages: [String]?
+	}
+
+    // MARK: - API Errors
+
+    case clientError(Metadata)
+    case serverError(Metadata)
+    case notFound(Metadata)
+    case invalidToken(Metadata)
+    case invalidCredentials(Metadata)
+
+    // MARK: - Local, Unknown errors
+
+    case localError(Error)
+    case cancelled
+    case unexpectedResponse(Any)
+    case unknownError
+
 }
