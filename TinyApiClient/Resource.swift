@@ -35,7 +35,7 @@ public struct BasicResource<Model>: Resource {
 
 	public var errorParser: ErrorParseBlock?
 
-	init(request: Request, rootKey: String? = nil, parser: @escaping ParseBlock, errorParser: ErrorParseBlock? = nil) {
+	public init(request: Request, rootKey: String? = nil, parser: @escaping ParseBlock, errorParser: ErrorParseBlock? = nil) {
 		self.request = request
 		self.rootKey = rootKey
 		self.parser = parser

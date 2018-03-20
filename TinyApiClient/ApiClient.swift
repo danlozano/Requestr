@@ -113,7 +113,7 @@ public extension ApiClient {
 
 	// MARK: - RequestProtocol Loading
 
-	func loadRequest(_ request: Request, completion: @escaping (ApiResult<EmptyResult>) -> Void) -> URLSessionDataTask? {
+	func loadRequest(_ request: Request, errorParser: ((Any) -> [String]?)? = nil, completion: @escaping (ApiResult<EmptyResult>) -> Void) -> URLSessionDataTask? {
 		guard let urlRequest = request.urlRequest else {
 			return nil
 		}
@@ -160,20 +160,14 @@ public extension ApiClient {
     // GET Item
     @discardableResult
     func GET<T: JSONDeserializable>(_ address: Address, rootKey: String? = nil, parameters: URLParameters? = nil, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask? {
-		let request = BasicRequest(method: .GET,
-								  address: address,
-								  parameters: parameters,
-								  body: nil)
+		let request = BasicRequest(method: .GET, address: address, parameters: parameters, body: nil)
 		return loadRequest(request, rootKey: rootKey, completion: completion)
     }
 
     // GET Array
     @discardableResult
     func GET<T: JSONDeserializable>(_ address: Address, rootKey: String? = nil, parameters: URLParameters? = nil, completion: @escaping (ApiResult<[T]>) -> Void) -> URLSessionDataTask? {
-		let request = BasicRequest(method: .GET,
-								  address: address,
-								  parameters: parameters,
-								  body: nil)
+		let request = BasicRequest(method: .GET, address: address, parameters: parameters, body: nil)
 		return loadRequest(request, rootKey: rootKey, completion: completion)
     }
 
@@ -182,20 +176,14 @@ public extension ApiClient {
     // POST with empty response
     @discardableResult
     func POST(_ address: Address, parameters: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<EmptyResult>) -> Void) -> URLSessionDataTask? {
-		let request = BasicRequest(method: .POST,
-								  address: address,
-								  parameters: parameters,
-								  body: body)
+		let request = BasicRequest(method: .POST, address: address, parameters: parameters, body: body)
 		return loadRequest(request, completion: completion)
     }
 
     // POST with resource as response
     @discardableResult
     func POST<T: JSONDeserializable>(_ address: Address, rootKey: String? = nil, parameters: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask? {
-		let request = BasicRequest(method: .POST,
-								  address: address,
-								  parameters: parameters,
-								  body: body)
+		let request = BasicRequest(method: .POST, address: address, parameters: parameters, body: body)
 		return loadRequest(request, rootKey: rootKey, completion: completion)
     }
 
@@ -204,40 +192,28 @@ public extension ApiClient {
     // PUT with empty response
     @discardableResult
     func PUT(_ address: Address, parameters: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<EmptyResult>) -> Void) -> URLSessionDataTask? {
-		let request = BasicRequest(method: .PUT,
-								  address: address,
-								  parameters: parameters,
-								  body: body)
+		let request = BasicRequest(method: .PUT, address: address, parameters: parameters, body: body)
 		return loadRequest(request, completion: completion)
     }
 
     // PUT with resource as response
     @discardableResult
     func PUT<T: JSONDeserializable>(_ address: Address, rootKey: String? = nil, parameters: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask? {
-		let request = BasicRequest(method: .PUT,
-								  address: address,
-								  parameters: parameters,
-								  body: body)
+		let request = BasicRequest(method: .PUT, address: address, parameters: parameters, body: body)
 		return loadRequest(request, rootKey: rootKey, completion: completion)
     }
 
     // MARK: PATCH
     @discardableResult
     func PATCH<T: JSONDeserializable>(_ address: Address, rootKey: String? = nil, parameters: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask? {
-		let request = BasicRequest(method: .PATCH,
-								  address: address,
-								  parameters: parameters,
-								  body: body)
+		let request = BasicRequest(method: .PATCH, address: address, parameters: parameters, body: body)
 		return loadRequest(request, rootKey: rootKey, completion: completion)
     }
 
     // MARK: DELETE
     @discardableResult
     func DELETE<T: JSONDeserializable>(_ address: Address, rootKey: String? = nil, parameters: URLParameters? = nil, body: JSONSerializable? = nil, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask? {
-		let request = BasicRequest(method: .DELETE,
-								  address: address,
-								  parameters: parameters,
-								  body: body)
+		let request = BasicRequest(method: .DELETE, address: address, parameters: parameters, body: body)
 		return loadRequest(request, rootKey: rootKey, completion: completion)
     }
 
@@ -310,7 +286,7 @@ private extension ApiClient {
 
     func fetch<T>(request: URLRequest, parseBlock: @escaping (Any) -> (resource: T?, other: JSONDictionary?), errorParser: ErrorParser?, completion: @escaping (ApiResult<T>) -> Void) -> URLSessionDataTask {
         ActivityManager.incrementActivityCount()
-        
+
         let task = jsonTaskWithRequest(request: request as URLRequest) { (json, response, error) in
             DispatchQueue.main.async {
                 ActivityManager.decreaseActivityCount()
@@ -330,38 +306,6 @@ private extension ApiClient {
         return task
     }
 
-    // MARK: NSURLSession - Data Task Creation
-
-    func jsonTaskWithRequest(request: URLRequest, completion: @escaping (Any?, HTTPURLResponse?, Swift.Error?) -> Void) -> URLSessionDataTask {
-        var task: URLSessionDataTask!
-        task = urlSession.dataTask(with: request, completionHandler: { (data, response, error) in
-            self.currentTasks.remove(task)
-            let http = response as? HTTPURLResponse
-            if let error = error {
-                self.debugLog(msg: "Received an error from HTTP \(request.httpMethod ?? "") to \(request.url?.absoluteString ?? "URL")")
-                self.debugLog(msg: "Error: \(error)")
-                completion(nil, http, error)
-            } else {
-                self.debugLog(msg: "Received HTTP \(http?.statusCode ?? 0) from \(request.httpMethod ?? "") to \(request.url?.absoluteString ?? "URL")")
-                if let data = data {
-                    do {
-                        self.debugResponseData(data: data)
-                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                        completion(jsonObject, http, nil)
-                    } catch {
-                        self.debugLog(msg: "Error parsing response as JSON")
-                        completion(nil, http, NSError(domain: "com.icalialabs.jsonerror", code: 10, userInfo: nil))
-                    }
-                } else {
-                    completion(nil, http, NSError(domain: "com.icalialabs.emptyresponse", code: 11, userInfo: nil))
-                }
-            }
-
-        })
-        currentTasks.insert(task)
-        return task
-    }
-
 }
 
 // MARK: - Response/Error Handling
@@ -374,40 +318,39 @@ extension ApiClient {
 			let parseResult = parseBlock(json)
 			if let resource = parseResult.resource {
 				let headers = response.allHeaderFields as? Dictionary<String, Any>
-				let metadata = Metadata(statusCode: response.statusCode, headers: headers, other: parseResult.other)
+				let metadata = ResponseMetadata(statusCode: response.statusCode, headers: headers, other: parseResult.other)
 				completion(.success(resource: resource, meta: metadata))
 			} else {
 				print("API CLIENT: WARNING: Couldn't parse the following JSON as a \(T.self)")
 				print(json)
-				completion(.error(.unexpectedResponse(json)))
+				completion(.error(.resourceParseError(resourceType: T.self, json: json)))
 			}
 		default:
-			handleAPIError(response: response, json: json, errorParser: errorParser, completion: completion)
+			handleAPIError(response: response, jsonAny: json, errorParser: errorParser, completion: completion)
 		}
 	}
 
-	func handleAPIError<T>(response: HTTPURLResponse, json: Any, errorParser: ErrorParser?, completion: (ApiResult<T>) -> Void) {
+	func handleAPIError<T>(response: HTTPURLResponse, jsonAny: Any, errorParser: ErrorParser?, completion: (ApiResult<T>) -> Void) {
+		let jsonDictionary = jsonAny as? JSONDictionary
 		let errorMessages: [String]?
 
-		if let errors = errorParser?(json) {
+		if let errors = errorParser?(jsonAny) {
 			errorMessages = errors
-		} else if let error = (json as? JSONDictionary)?["error"] as? String {
+		} else if let error = jsonDictionary?["error"] as? String {
 			errorMessages = [error]
-		} else if let errors = (json as? JSONDictionary)?["errors"] as? [String] {
+		} else if let errors = jsonDictionary?["errors"] as? [String] {
 			errorMessages = errors
+		} else if let errors = jsonDictionary?["errors"] as? [JSONDictionary] {
+			errorMessages = errors.flatMap { return $0["message"] as? String }
 		} else {
 			errorMessages = nil
 		}
 
-		let errorMetadata = ApiError.Metadata(statusCode: response.statusCode, errorMessages: errorMessages)
+		let errorMetadata = ErrorMetadata(statusCode: response.statusCode, errorMessages: errorMessages, userInfo: jsonDictionary)
 
 		switch response.statusCode {
-		case 401:
-			completion(.error(.invalidToken(errorMetadata)))
-		case 402:
-			completion(.error(.invalidCredentials(errorMetadata)))
-		case 403:
-			completion(.error(.invalidToken(errorMetadata)))
+		case 401...403:
+			completion(.error(.unauthorized(errorMetadata)))
 		case 404:
 			completion(.error(.notFound(errorMetadata)))
 		case 400...499:
@@ -416,6 +359,7 @@ extension ApiClient {
 			completion(.error(.serverError(errorMetadata)))
 		default:
 			print("Received HTTP \(response.statusCode), which was not handled")
+			completion(.error(.unknownError))
 		}
 	}
 
@@ -425,6 +369,42 @@ extension ApiClient {
 		} else {
 			completion(.error(.localError(error)))
 		}
+	}
+
+}
+
+// MARK: - URLSessionDataTask Creation
+
+private extension ApiClient {
+
+	func jsonTaskWithRequest(request: URLRequest, completion: @escaping (Any?, HTTPURLResponse?, Swift.Error?) -> Void) -> URLSessionDataTask {
+		var task: URLSessionDataTask!
+		task = urlSession.dataTask(with: request, completionHandler: { (data, response, error) in
+			self.currentTasks.remove(task)
+			let httpResponse = response as? HTTPURLResponse
+			if let error = error {
+				self.debugLog(msg: "Received an error from HTTP \(request.httpMethod ?? "") to \(request.url?.absoluteString ?? "URL")")
+				self.debugLog(msg: "Error: \(error)")
+				completion(nil, httpResponse, error)
+			} else {
+				self.debugLog(msg: "Received HTTP \(httpResponse?.statusCode ?? 0) from \(request.httpMethod ?? "") to \(request.url?.absoluteString ?? "URL")")
+				if let data = data {
+					do {
+						self.debugResponseData(data: data)
+						let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+						completion(jsonObject, httpResponse, nil)
+					} catch {
+						self.debugLog(msg: "Error parsing response as JSON")
+						completion(nil, httpResponse, ApiError.jsonParseError(data))
+					}
+				} else {
+					completion(nil, httpResponse, ApiError.emptyResponse)
+				}
+			}
+
+		})
+		currentTasks.insert(task)
+		return task
 	}
 
 }
